@@ -34,8 +34,6 @@ def main():
     
     # Lưu đỉa chị server và port và config.json
     update_config(server_ip, port)
-
-    connection.verify_server_connection(server_ip, port)
       
     while True:
         print("\n- MENU CHINH -")

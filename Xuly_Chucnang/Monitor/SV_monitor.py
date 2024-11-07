@@ -20,7 +20,7 @@ def monitor(client_socket):
                 
                 # Gửi kích thước dữ liệu trước, sau đó gửi dữ liệu ảnh
                 client_socket.sendall(data_length + screen_data)
-                time.sleep(0.02)  # Gửi hình ảnh mới mỗi 50ms (50 FPS)
+                time.sleep(0.05)  # Gửi hình ảnh mới mỗi 200ms (20 FPS)
         finally:
             client_socket.close()                  
     else:

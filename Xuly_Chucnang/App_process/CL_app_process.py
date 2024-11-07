@@ -1,8 +1,9 @@
-from module_support import send_command, receive_response, read_config
+from module_support import receive_response_65535, send_command, receive_response, read_config
 import socket
 
-def app_process(client_socket):
-    while True:
+def app_process(client_socket):    
+    while True:    
+        
         print("\n-- List / Start / Stop cac Applications dang chay SERVER --")
         print("1. List Applications dang chay")
         print("2. Stop Application theo PID")        
@@ -26,10 +27,9 @@ def app_process(client_socket):
 
 
             
-def list_apps_running(client_socket):
-    
+def list_apps_running(client_socket):    
     send_command(client_socket, "LIST_APPS_RUNNING")    
-    running_apps = receive_response(client_socket)
+    running_apps = receive_response_65535(client_socket)
     if not running_apps.strip():  # Kiểm tra nếu danh sách trống
         print("\nKhong co applications dang chay.\n")
     else:
@@ -48,7 +48,7 @@ def stop_app_running_by_PID(client_socket):
         print("PID khong hop le.")
         
 def start_app_by_path(client_socket):    
-    app_path = input("Dien duong dan app de start (e.g., C:\Windows\System32\notepad.exe): ")
+    app_path = input(r"Dien duong dan app de start (e.g., C:\Windows\System32\notepad.exe): ")
     send_command(client_socket, f"START_APP_BY_PATH {app_path}")    
     response = receive_response(client_socket)
     if "not allowed" in response.lower() or "not found" in response.lower():
@@ -57,10 +57,13 @@ def start_app_by_path(client_socket):
         print(response)
     
     
-if __name__ == "__main__":    
-    server_ip, port = read_config()
+# Khởi tạo socket và gọi hàm
+if __name__ == "__main__":  
+    server_ip, port = read_config()  
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect((server_ip, port))  # Dùng IP và port từ file config
+    client_socket.connect((server_ip, port))  # Địa chỉ IP và port của server
     app_process(client_socket)
     client_socket.close()
+    
+    
     

@@ -9,7 +9,7 @@ from module_support import send_command
 def monitor(client_socket):
     app = QApplication(sys.argv)
     window = QMainWindow()
-    window.setWindowTitle("Xem man hinh Client thoi gian thuc 50FPS")
+    window.setWindowTitle("Xem man hinh Client thoi gian thuc 20FPS")
     window.setGeometry(100, 100, 800, 600)
     
     label = QLabel(window)

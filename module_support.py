@@ -10,11 +10,16 @@ def send_command_utf8(socket, command):
     #Gửi câu lệnh từ client/server đến server/client.
     socket.sendall(command.encode("utf-8"))
 
-def receive_response(socket, buffer_size=65535):
+def receive_response(socket, buffer_size=4096):
     #Nhận phản hồi từ server/client.
     return socket.recv(buffer_size).decode()
 
-def receive_response_utf8(socket, buffer_size=65535):
+def receive_response_65535(socket, buffer_size=65535):
+    #Nhận phản hồi từ server/client.
+    return socket.recv(buffer_size).decode()
+
+
+def receive_response_utf8(socket, buffer_size=4096):
     #Nhận phản hồi từ server/client.
     return socket.recv(buffer_size).decode("utf-8")
 

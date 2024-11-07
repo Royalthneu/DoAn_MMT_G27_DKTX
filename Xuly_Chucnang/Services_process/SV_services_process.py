@@ -1,5 +1,5 @@
 import socket
-from module_support import run_powershell_command, send_message, receive_response
+from module_support import run_powershell_command, send_command, send_message, receive_response
 
 def server_process(client_socket):    
     while True:     
@@ -34,7 +34,7 @@ def start_service(client_socket, service_name):
     if output:
         send_message(client_socket, f"Loi start dich vu '{service_name}': {output}")
     else:
-        send_message(client_socket, f"Dic vh '{service_name}' da duoc yeu cau start.\n")
+        send_message(client_socket, f"Dich vu '{service_name}' da duoc yeu cau start.\n")
 
 def stop_service(client_socket, service_name):
     # Dừng dịch vụ
