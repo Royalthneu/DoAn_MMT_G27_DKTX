@@ -1,37 +1,44 @@
-from Check import ip_port
+from Xuly_Chucnang.App_process.CL_app_process import app_process
+import connection
+from Xuly_Chucnang.Del_copy.CL_del_copy import del_copy
+from Xuly_Chucnang.Keylogger.CL_keylogger import bat_tat_key_logger
+from Xuly_Chucnang.Monitor.CL_monitor import monitor
+from Xuly_Chucnang.Services_process.CL_services_process import services_process
+from Xuly_Chucnang.Shutdown_reset.CL_shutdown_reset import shutdown_reset
 import socket
+
+from module_support import update_config
 
 def main():
     while True:
-        server_ip = input("Enter the server IP address: ") 
-        
-        if not ip_port.check_ip_address_valid(server_ip):
-            print("Invalid IP address. Please try again.")
+        server_ip = input("Dien dia chi IP cua Server: ")
+        if not connection.check_ip_address_valid(server_ip):
+            print("IP khong hop le. Vui long dien lai.")
             continue
         
-        try:
-            port = int(input("Enter the server port: "))
-        except ValueError:
-            print("Port must be a number.")
-            continue
-      
-        if not ip_port.check_port_valid(port):
-            print("Invalid port. Please enter a port between 1 and 65535.")
+        port = int(input("Dien so port: "))
+        if not connection.check_port_valid(port):
+            print("Port khong hop le. Vui long dien lai.")
             continue
 
         try:
             client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             # client_socket.settimeout(3) # Set thời gian chời kết nối ở đây là 3s  
             client_socket.connect((server_ip, port))
-            print("Connected to the server successfully!")
+            print(f"Ket noi server co dia chi {server_ip}:{port} thanh cong")
             break
         except socket.error as e:
-            print(f"Connection failed: {e}. Please check IP and Port were opened.")
+            print(f"Ket noi khong thanh cong: {e}. Vui long kiem tra server co dang chay khong va IP, port co dung khong.")
             client_socket.close()
             continue
+    
+    # Lưu đỉa chị server và port và config.json
+    update_config(server_ip, port)
 
+    connection.verify_server_connection(server_ip, port)
+      
     while True:
-        print("\n--- MAIN MENU ---")
+        print("\n- MENU CHINH -")
         print("1. List / Start / Stop cac Applications dang chay SERVER")
         print("2. List / Start / Stop cac Services dang chay SERVER")
         print("3. Shutdown / Reset may SERVER")       
@@ -47,10 +54,10 @@ def main():
             services_process(client_socket)   
         elif choice == '3':
             shutdown_reset(client_socket)
-        elif choice == '4':
+        elif choice == '4':            
             monitor(client_socket)
         elif choice == '5':
-            keylogger(client_socket)
+            bat_tat_key_logger(client_socket)
         elif choice == '6':
             del_copy(client_socket)                
         elif choice == '0':
@@ -59,3 +66,6 @@ def main():
             break
         else:
             print("Invalid choice, try again.")
+            
+if __name__ == "__main__":
+    main()
