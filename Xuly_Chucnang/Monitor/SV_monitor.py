@@ -1,41 +1,54 @@
-import pyautogui
-import io
-import time
 import socket
-from CRUD import receive_response, send_message
+import cv2
+import numpy as np
+import struct
+from XuLyFileConfig import read_config
 
-def capture_screen():
-    # Chụp ảnh màn hình và trả về dữ liệu dưới dạng byte.
-    screenshot = pyautogui.screenshot()
-    byte_io = io.BytesIO()
-    screenshot.save(byte_io, format="JPEG", quality=50)  # Giảm chất lượng để tăng tốc độ
-    return byte_io.getvalue()
+# Hàm nhận đủ dữ liệu từ client
+def receive_all(sock, count):
+    buf = b''
+    while count:
+        newbuf = sock.recv(count)
+        if not newbuf: return None
+        buf += newbuf
+        count -= len(newbuf)
+    return buf
 
+# Hàm gửi ảnh dưới dạng byte stream
+def send_frame(client_socket, frame):
+    # Nén ảnh và chuyển thành byte stream
+    encoded_frame = cv2.imencode('.jpg', frame)[1].tobytes()
+    message_size = struct.pack(">L", len(encoded_frame))  # Lưu kích thước ảnh
+    client_socket.sendall(message_size)  # Gửi kích thước ảnh
+    client_socket.sendall(encoded_frame)  # Gửi dữ liệu ảnh
+
+# Hàm hiển thị màn hình của server
 def monitor(client_socket):
-    command = receive_response(client_socket).strip()
-    if command == "VIEW_MONITOR":
-        try:
-            while True:
-                screen_data = capture_screen()
-                data_length = len(screen_data).to_bytes(4, byteorder="big")
-
-                # Gửi kích thước dữ liệu trước, sau đó gửi dữ liệu ảnh
-                client_socket.sendall(data_length + screen_data)
-                time.sleep(0.05)  # Gửi hình ảnh mới mỗi 200ms (20 FPS)
-        finally:
-            client_socket.close()
-
-if __name__ == "__main__":
-    # Thiết lập server
-    server_ip = "0.0.0.0"
-    server_port = 8080
-
+    # Lấy IP và cổng từ config
+    server_ip, port = read_config()
+    
+    # Tạo socket server
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind((server_ip, server_port))
+    server_socket.bind((server_ip, port))
     server_socket.listen(1)
-    print(f"Server đang lắng nghe tại {server_ip}:{server_port}")
+    print(f"Server is listening at {server_ip}:{port}")
 
+    # Chấp nhận kết nối từ client
     client_socket, addr = server_socket.accept()
-    print(f"Client kết nối từ {addr}")
+    print(f"Connection from: {addr}")
 
-    monitor(client_socket)
+    try:
+        while True:
+            # Chụp ảnh màn hình của server (ở đây tôi giả sử bạn đã có hàm chụp màn hình)
+            screenshot = np.array(cv2.imread('screenshot.png'))  # Thay đổi theo cách bạn chụp màn hình
+            send_frame(client_socket, screenshot)
+
+            # Delay (có thể điều chỉnh để không quá nhanh hoặc quá chậm)
+            cv2.waitKey(100)
+
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+    finally:
+        client_socket.close()
+        server_socket.close()
+

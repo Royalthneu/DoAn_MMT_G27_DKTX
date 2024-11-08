@@ -1,5 +1,4 @@
-import socket
-from CRUD import run_powershell_command, send_command, send_message, receive_response
+from XuLy_KetNoi_GiaoTiep import run_powershell_command, send_message, receive_response
 
 def server_process(client_socket):    
     while True:     

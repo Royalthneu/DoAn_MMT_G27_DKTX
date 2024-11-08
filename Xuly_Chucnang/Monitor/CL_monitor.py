@@ -1,66 +1,54 @@
 import socket
-import sys
-from tkinter import Tk, Label
-from PIL import Image, ImageTk
-import io
-from CRUD import send_command
+import cv2
+import numpy as np
+import struct
+from XuLyFileConfig import read_config
 
+# Hàm nhận đủ dữ liệu từ server
+def receive_all(sock, count):
+    buf = b''
+    while count:
+        newbuf = sock.recv(count)
+        if not newbuf: return None
+        buf += newbuf
+        count -= len(newbuf)
+    return buf
+
+# Hàm hiển thị màn hình từ server
 def monitor(client_socket):
-    # Tạo cửa sổ Tkinter
-    root = Tk()
-    root.title("Xem màn hình Client thời gian thực")
-    root.geometry("800x600")
+    cv2.namedWindow('Received', cv2.WINDOW_NORMAL)  # Khởi tạo cửa sổ hiển thị ảnh
 
-    label = Label(root)
-    label.pack(fill="both", expand=True)
+    try:
+        while True:
+            # Nhận kích thước dữ liệu ảnh từ server
+            message_size = receive_all(client_socket, struct.calcsize(">L"))
+            if not message_size:
+                break
+            message_size = struct.unpack(">L", message_size)[0]
 
-    # Gửi lệnh yêu cầu bật chức năng xem màn hình
-    send_command(client_socket, "VIEW_MONITOR")
+            # Nhận dữ liệu ảnh từ server
+            frame_data = receive_all(client_socket, message_size)
+            if not frame_data:
+                break
 
-    # Cập nhật màn hình mỗi khi nhận được hình ảnh từ server
-    def update_screen():
-        try:
-            # Đọc kích thước dữ liệu ảnh (4 byte đầu tiên)
-            data_length = int.from_bytes(client_socket.recv(4), byteorder="big")
+            # Chuyển đổi dữ liệu ảnh từ byte thành ảnh
+            frame = np.frombuffer(frame_data, dtype=np.uint8)
+            frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
+            if frame is None:
+                print("Error decoding frame.")
+                continue
 
-            # Đọc dữ liệu ảnh theo kích thước đã nhận
-            screen_data = b""
-            while len(screen_data) < data_length:
-                packet = client_socket.recv(data_length - len(screen_data))
-                if not packet:
-                    return
-                screen_data += packet
+            # Hiển thị ảnh nhận được từ server
+            cv2.imshow('Received', frame)
 
-            # Chuyển đổi dữ liệu ảnh thành hình ảnh Pillow
-            screen_image = Image.open(io.BytesIO(screen_data))
-            screen_image = screen_image.resize((800, 600))  # Điều chỉnh kích thước nếu cần
+            # Đảm bảo giao diện không bị "Not responding"
+            key = cv2.waitKey(1) & 0xFF
+            if key == ord('q'):
+                break
 
-            # Chuyển đổi ảnh thành định dạng có thể hiển thị trong Tkinter
-            photo = ImageTk.PhotoImage(screen_image)
-            label.config(image=photo)
-            label.image = photo  # Cần giữ tham chiếu đến ảnh để tránh bị mất
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+    finally:
+        cv2.destroyAllWindows()
+        client_socket.close()
 
-        except Exception as e:
-            print("Error updating screen:", e)
-        
-        # Lặp lại sau 50ms (~20 FPS)
-        root.after(50, update_screen)
-
-    # Bắt đầu cập nhật màn hình
-    update_screen()
-
-    # Khởi động vòng lặp sự kiện Tkinter
-    root.mainloop()
-
-    # Đóng kết nối socket khi tắt ứng dụng.
-    client_socket.close()
-
-if __name__ == "__main__":
-    # Kết nối đến server và bắt đầu theo dõi màn hình
-    server_ip = "127.0.0.1"  # Thay thế IP và Port nếu cần
-    server_port = 8080
-
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect((server_ip, server_port))
-
-    monitor(client_socket)

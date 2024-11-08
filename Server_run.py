@@ -1,28 +1,31 @@
 import socket
 import threading
-from Xuly_Chucnang.App_process.SV_app_process import list_apps_running, start_app_by_path, stop_app
-from connection import check_ip_address_valid, check_port_open, check_port_valid, open_port
-from Xuly_Chucnang.Del_copy.SV_del_copy import copy_file, delete_file
-from Xuly_Chucnang.Keylogger.SV_keylogger import start_keylogger
-from Xuly_Chucnang.Monitor.SV_monitor import monitor
-from Xuly_Chucnang.Services_process.SV_services_process import list_running_services, start_service, stop_service
-from Xuly_Chucnang.Shutdown_reset.SV_shutdown_reset import reset_server, shutdown_server
+import XuLy_ChucNang
+import XuLy_KetNoi_GiaoTiep
+import XuLy_ChucNang.App_process.SV_app_process
+import XuLy_ChucNang.Services_process.SV_services_process
+import XuLy_ChucNang.Shutdown_reset.SV_shutdown_reset
+import XuLy_ChucNang.Monitor.SV_monitor
+import XuLy_ChucNang.Keylogger.SV_keylogger
+import XuLy_ChucNang.Del_copy.SV_del_copy
+
+
 
 def main():
     server_ip = socket.gethostbyname(socket.gethostname())
-    port = 8080
-    if check_port_open(port):
+    port = 8081
+    if XuLy_KetNoi_GiaoTiep.check_port_open(port):
         print(f"\nCổng {port} đã được mở.")
     else:
         # Nếu cổng chưa mở, hỏi người dùng có muốn mở không
         response = input(f"Cổng {port} chưa mở. Bạn có muốn mở cổng {port} không? (y/n): ")
         if response.lower() == 'y':
-            open_port(port)
+            XuLy_KetNoi_GiaoTiep.open_port(port)
         else:
             print(f"Cổng {port} sẽ không được mở. Thoát chương trình.")
             return
         
-    if check_ip_address_valid(server_ip) and check_port_valid(port):
+    if XuLy_KetNoi_GiaoTiep.check_ip_address_valid(server_ip) and XuLy_KetNoi_GiaoTiep.check_port_valid(port):
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.bind((server_ip, port))
         server_socket.listen(3)  # số lượng kết nối trong 1 thời điểm
@@ -58,49 +61,49 @@ def handle_client(client_socket):
            
             # List / Start / Stop các Applications đang chạy SERVER
             if buffer.startswith("LIST_APPS_RUNNING"):
-                list_apps_running(client_socket) 
+                XuLy_ChucNang.App_process.SV_app_process.list_apps_running(client_socket) 
             elif buffer.startswith("START_APP_BY_PATH"):
                 app_path = buffer.split(" ",1)[1]
-                start_app_by_path(client_socket, app_path)                 
+                XuLy_ChucNang.App_process.SV_app_process.start_app_by_path(client_socket, app_path)                 
             elif buffer.startswith("STOP_APP"):
                 pid = int(buffer.split()[1])
-                stop_app(client_socket, pid)
+                XuLy_ChucNang.App_process.SV_app_process.stop_app(client_socket, pid)
                 
             # List / Start / Stop Services (Processes) đang chạy SERVER
             elif buffer.startswith("LIST_SERVICES_RUNNING"):
-                list_running_services(client_socket)           
+                XuLy_ChucNang.Services_process.SV_services_process.list_running_services(client_socket)           
             elif buffer.startswith("START_SERVICE"):
                 service_name = buffer.split(" ",1)[1]
-                start_service(client_socket, service_name)
+                XuLy_ChucNang.Services_process.SV_services_process.start_service(client_socket, service_name)
             elif buffer.startswith("STOP_SERVICE"):
                 service_name = buffer.split(" ",1)[1]
-                stop_service(client_socket, service_name) 
+                XuLy_ChucNang.Services_process.SV_services_process.stop_service(client_socket, service_name) 
             
             # Shutdown / Reset máy SERVER
             elif buffer == "SHUTDOWN_SERVER":
-                shutdown_server(client_socket)
+                XuLy_ChucNang.Shutdown_reset.SV_shutdown_reset.shutdown_server(client_socket)
             elif buffer == "RESET_SERVER":
-                reset_server(client_socket)
+                XuLy_ChucNang.Shutdown_reset.SV_shutdown_reset.reset_server(client_socket)
             
             
             # Xem màn hình hiện thời của máy SERVER
             elif buffer.startswith("VIEW_MONITOR"):
-                monitor(client_socket)
+                XuLy_ChucNang.Monitor.SV_monitor.monitor(client_socket)
                 
             # Khóa / Bắt phím nhấn (keylogger) ở máy SERVER
             elif buffer.startswith("START_KEYLOGGER"):
                 print("Starting keylogger...")                
-                start_keylogger(client_socket)
+                XuLy_ChucNang.Keylogger.SV_keylogger.start_keylogger(client_socket)
             elif buffer == "STOP_KEYLOGGER":
                 print("Keylogger stopped")  
                         
             # Xóa files ; Copy files từ máy SERVER
             elif buffer.startswith("DELETE_FILE"):
                 file_path = buffer.split(" ", 1)[1]  # Lấy đường dẫn file từ lệnh
-                delete_file(client_socket, file_path)
+                XuLy_ChucNang.Del_copy.SV_del_copy.delete_file(client_socket, file_path)
             elif buffer.startswith("COPY_FILE"):
                 file_path = buffer.split(" ", 1)[1]  # Lấy đường dẫn file từ lệnh
-                copy_file(client_socket, file_path)
+                XuLy_ChucNang.Del_copy.SV_del_copy.copy_file(client_socket, file_path)
             else:
                 print("Khong biet lenh vua nhan tu may Client.")
 

@@ -1,57 +1,7 @@
+# Sử dụng file config.json để lưu ip và port
 import json
 import os
-import subprocess
 
-def send_command(socket, command):
-    #Gửi câu lệnh từ client/server đến server/client.
-    socket.sendall(command.encode())
-    
-def send_command_utf8(socket, command):
-    #Gửi câu lệnh từ client/server đến server/client.
-    socket.sendall(command.encode("utf-8"))
-
-def receive_response(socket, buffer_size=4096):
-    #Nhận phản hồi từ server/client.
-    return socket.recv(buffer_size).decode()
-
-def receive_response_65535(socket, buffer_size=65535):
-    #Nhận phản hồi từ server/client.
-    return socket.recv(buffer_size).decode()
-
-
-def receive_response_utf8(socket, buffer_size=4096):
-    #Nhận phản hồi từ server/client.
-    return socket.recv(buffer_size).decode("utf-8")
-
-def replace_path(file_path):
-    if '\\\\' in file_path:
-         file_path = file_path.replace("\\\\", "\\")  # Thay thế '\\' thành '\'
-     
-def send_message(client_socket, message):
-    #Hàm gửi thông báo đến client
-    client_socket.sendall(message.encode())
-    
-def send_error_message(client_socket, message):
-    #Hàm gửi thông báo lỗi
-    send_command_utf8(client_socket, f"Loi: {message}\n")
-
-def send_success_message(client_socket, message):
-    #Hàm gửi thông báo thành công
-    send_command_utf8(client_socket, f"{message}\n")
-    
-def run_powershell_command(command):
-    """Hàm thực thi lệnh PowerShell và trả về kết quả hoặc lỗi"""
-    try:
-        result = subprocess.run(
-            ["powershell", "-Command", command],
-            check=True, capture_output=True, text=True
-        )
-        return result.stdout
-    except subprocess.CalledProcessError as e:
-        return e.stderr
-         
-
-# Sử dụng file config.json để lưu ip và port
 CONFIG_FILE = "config.json"
 
 # Kiểm tra xem file JSON có tồn tại không

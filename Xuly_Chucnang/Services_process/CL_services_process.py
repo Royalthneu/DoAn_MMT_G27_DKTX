@@ -1,5 +1,7 @@
 import socket
-from CRUD import receive_response_65535, send_command, receive_response, read_config
+from XuLyFileConfig import read_config
+from XuLy_KetNoi_GiaoTiep import receive_response_65535, send_command, receive_response
+
 
 def services_process(client_socket):   
     while True:
