@@ -1,13 +1,13 @@
 import socket
 import threading
-import XuLy_ChucNang
+import Xuly_Chucnang
 import XuLy_KetNoi_GiaoTiep
-import XuLy_ChucNang.App_process.SV_app_process
-import XuLy_ChucNang.Services_process.SV_services_process
-import XuLy_ChucNang.Shutdown_reset.SV_shutdown_reset
-import XuLy_ChucNang.Monitor.SV_monitor
-import XuLy_ChucNang.Keylogger.SV_keylogger
-import XuLy_ChucNang.Del_copy.SV_del_copy
+import Xuly_Chucnang.App_process.SV_app_process
+import Xuly_Chucnang.Services_process.SV_services_process
+import Xuly_Chucnang.Shutdown_reset.SV_shutdown_reset
+import Xuly_Chucnang.Monitor.SV_monitor
+import Xuly_Chucnang.Keylogger.SV_keylogger
+import Xuly_Chucnang.Del_copy.SV_del_copy
 
 
 
@@ -61,49 +61,49 @@ def handle_client(client_socket):
            
             # List / Start / Stop các Applications đang chạy SERVER
             if buffer.startswith("LIST_APPS_RUNNING"):
-                XuLy_ChucNang.App_process.SV_app_process.list_apps_running(client_socket) 
+                Xuly_Chucnang.App_process.SV_app_process.list_apps_running(client_socket) 
             elif buffer.startswith("START_APP_BY_PATH"):
                 app_path = buffer.split(" ",1)[1]
-                XuLy_ChucNang.App_process.SV_app_process.start_app_by_path(client_socket, app_path)                 
+                Xuly_Chucnang.App_process.SV_app_process.start_app_by_path(client_socket, app_path)                 
             elif buffer.startswith("STOP_APP"):
                 pid = int(buffer.split()[1])
-                XuLy_ChucNang.App_process.SV_app_process.stop_app(client_socket, pid)
+                Xuly_Chucnang.App_process.SV_app_process.stop_app(client_socket, pid)
                 
             # List / Start / Stop Services (Processes) đang chạy SERVER
             elif buffer.startswith("LIST_SERVICES_RUNNING"):
-                XuLy_ChucNang.Services_process.SV_services_process.list_running_services(client_socket)           
+                Xuly_Chucnang.Services_process.SV_services_process.list_running_services(client_socket)           
             elif buffer.startswith("START_SERVICE"):
                 service_name = buffer.split(" ",1)[1]
-                XuLy_ChucNang.Services_process.SV_services_process.start_service(client_socket, service_name)
+                Xuly_Chucnang.Services_process.SV_services_process.start_service(client_socket, service_name)
             elif buffer.startswith("STOP_SERVICE"):
                 service_name = buffer.split(" ",1)[1]
-                XuLy_ChucNang.Services_process.SV_services_process.stop_service(client_socket, service_name) 
+                Xuly_Chucnang.Services_process.SV_services_process.stop_service(client_socket, service_name) 
             
             # Shutdown / Reset máy SERVER
             elif buffer == "SHUTDOWN_SERVER":
-                XuLy_ChucNang.Shutdown_reset.SV_shutdown_reset.shutdown_server(client_socket)
+                Xuly_Chucnang.Shutdown_reset.SV_shutdown_reset.shutdown_server(client_socket)
             elif buffer == "RESET_SERVER":
-                XuLy_ChucNang.Shutdown_reset.SV_shutdown_reset.reset_server(client_socket)
+                Xuly_Chucnang.Shutdown_reset.SV_shutdown_reset.reset_server(client_socket)
             
             
             # Xem màn hình hiện thời của máy SERVER
             elif buffer.startswith("VIEW_MONITOR"):
-                XuLy_ChucNang.Monitor.SV_monitor.monitor(client_socket)
+                Xuly_Chucnang.Monitor.SV_monitor.monitor(client_socket)
                 
             # Khóa / Bắt phím nhấn (keylogger) ở máy SERVER
             elif buffer.startswith("START_KEYLOGGER"):
                 print("Starting keylogger...")                
-                XuLy_ChucNang.Keylogger.SV_keylogger.start_keylogger(client_socket)
+                Xuly_Chucnang.Keylogger.SV_keylogger.start_keylogger(client_socket)
             elif buffer == "STOP_KEYLOGGER":
                 print("Keylogger stopped")  
                         
             # Xóa files ; Copy files từ máy SERVER
             elif buffer.startswith("DELETE_FILE"):
                 file_path = buffer.split(" ", 1)[1]  # Lấy đường dẫn file từ lệnh
-                XuLy_ChucNang.Del_copy.SV_del_copy.delete_file(client_socket, file_path)
+                Xuly_Chucnang.Del_copy.SV_del_copy.delete_file(client_socket, file_path)
             elif buffer.startswith("COPY_FILE"):
                 file_path = buffer.split(" ", 1)[1]  # Lấy đường dẫn file từ lệnh
-                XuLy_ChucNang.Del_copy.SV_del_copy.copy_file(client_socket, file_path)
+                Xuly_Chucnang.Del_copy.SV_del_copy.copy_file(client_socket, file_path)
             else:
                 print("Khong biet lenh vua nhan tu may Client.")
 

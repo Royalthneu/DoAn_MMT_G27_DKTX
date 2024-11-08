@@ -1,14 +1,14 @@
-import XuLy_ChucNang
+import Xuly_Chucnang
 import XuLy_KetNoi_GiaoTiep
 import socket
 
 from XuLyFileConfig import update_config
-import XuLy_ChucNang.App_process.CL_app_process
-import XuLy_ChucNang.Services_process.CL_services_process
-import XuLy_ChucNang.Shutdown_reset.CL_shutdown_reset
-import XuLy_ChucNang.Monitor.CL_monitor
-import XuLy_ChucNang.Keylogger.CL_keylogger
-import XuLy_ChucNang.Del_copy.CL_del_copy
+import Xuly_Chucnang.App_process.CL_app_process
+import Xuly_Chucnang.Services_process.CL_services_process
+import Xuly_Chucnang.Shutdown_reset.CL_shutdown_reset
+import Xuly_Chucnang.Monitor.CL_monitor
+import Xuly_Chucnang.Keylogger.CL_keylogger
+import Xuly_Chucnang.Del_copy.CL_del_copy
 
 
 def main():
@@ -49,17 +49,17 @@ def main():
         choice = input("Enter your choice: ")
 
         if choice == '1':            
-            XuLy_ChucNang.App_process.CL_app_process.app_process(client_socket)
+            Xuly_Chucnang.App_process.CL_app_process.app_process(client_socket)
         elif choice == '2':
-           XuLy_ChucNang.Services_process.CL_services_process.services_process(client_socket)   
+           Xuly_Chucnang.Services_process.CL_services_process.services_process(client_socket)   
         elif choice == '3':
-            XuLy_ChucNang.Shutdown_reset.CL_shutdown_reset.shutdown_reset(client_socket)
+            Xuly_Chucnang.Shutdown_reset.CL_shutdown_reset.shutdown_reset(client_socket)
         elif choice == '4':            
-            XuLy_ChucNang.Monitor.CL_monitor.monitor(client_socket)
+            Xuly_Chucnang.Monitor.CL_monitor.monitor(client_socket)
         elif choice == '5':
-            XuLy_ChucNang.Keylogger.CL_keylogger.bat_tat_key_logger(client_socket)
+            Xuly_Chucnang.Keylogger.CL_keylogger.bat_tat_key_logger(client_socket)
         elif choice == '6':
-            XuLy_ChucNang.Del_copy.CL_del_copy.del_copy(client_socket)                
+            Xuly_Chucnang.Del_copy.CL_del_copy.del_copy(client_socket)                
         elif choice == '0':
             client_socket.close()
             print("Disconnected from server.")
