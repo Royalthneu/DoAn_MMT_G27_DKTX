@@ -1,7 +1,7 @@
 import random
 import socket
 import subprocess
-from module_support import read_config, write_config, update_config
+from CRUD import read_config, write_config, update_config
 
 def check_ip_address_valid(ip):
     try:

