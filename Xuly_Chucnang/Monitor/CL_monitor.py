@@ -3,7 +3,7 @@ import sys
 from tkinter import Tk, Label
 from PIL import Image, ImageTk
 import io
-from module_support import send_command
+from CRUD import send_command
 
 def monitor(client_socket):
     # Tạo cửa sổ Tkinter

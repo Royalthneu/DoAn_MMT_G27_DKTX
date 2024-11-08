@@ -1,5 +1,5 @@
 import socket
-from module_support import receive_response_65535, send_command, receive_response, read_config
+from CRUD import receive_response_65535, send_command, receive_response, read_config
 
 def services_process(client_socket):   
     while True:
@@ -44,7 +44,7 @@ if __name__ == "__main__":
     else:        
         try:
             client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            client_socket.connect((server_ip, port))  # Dùng IP và port từ file config
+            client_socket.connect((server_ip, port))  # Dùng IP và port từ file config.json
             services_process(client_socket)
             client_socket.close()
         except socket.error as e:

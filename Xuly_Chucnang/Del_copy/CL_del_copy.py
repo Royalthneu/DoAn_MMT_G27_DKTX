@@ -1,10 +1,9 @@
 import os
-from module_support import send_command, receive_response, replace_path
+from CRUD import send_command, receive_response, replace_path
 
 
-def del_copy(client_socket, file_path):
-    replace_path(file_path)
-    
+def del_copy(client_socket):
+        
     while True:
         print("\n-- Xoa files ; Copy files tu may SERVER --")
         print("1. Xoa files")
@@ -15,7 +14,7 @@ def del_copy(client_socket, file_path):
     
         if choice == '1':
             file_path = input("Enter the full path of the file to delete on server: ")
-            send_command(client_socket, f"DELETE_FILE {replace_path(file_path)}")        
+            send_command(client_socket, f"DELETE_FILE {file_path}")        
             print(receive_response(client_socket))
         elif choice == '2':
             copy_file_from_server(client_socket)        

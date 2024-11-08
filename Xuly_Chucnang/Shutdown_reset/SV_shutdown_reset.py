@@ -1,5 +1,5 @@
 import subprocess
-from module_support import run_powershell_command, send_message
+from CRUD import run_powershell_command, send_message
 
 def shutdown_server(client_socket):                      
     try:  

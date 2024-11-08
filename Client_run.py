@@ -7,7 +7,7 @@ from Xuly_Chucnang.Services_process.CL_services_process import services_process
 from Xuly_Chucnang.Shutdown_reset.CL_shutdown_reset import shutdown_reset
 import socket
 
-from module_support import update_config
+from CRUD import update_config
 
 def main():
     while True:

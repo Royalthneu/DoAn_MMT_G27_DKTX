@@ -1,4 +1,4 @@
-from module_support import send_command, receive_response
+from CRUD import send_command, receive_response
 
 def shutdown_reset(client_socket):   
     while True:

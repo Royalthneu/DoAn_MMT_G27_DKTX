@@ -2,7 +2,7 @@ import pyautogui
 import io
 import time
 import socket
-from module_support import receive_response, send_message
+from CRUD import receive_response, send_message
 
 def capture_screen():
     # Chụp ảnh màn hình và trả về dữ liệu dưới dạng byte.
