@@ -1,5 +1,4 @@
 import socket
-import time
 import keyboard
 from vidstream import StreamingServer
 from XL_Chucnang.CRUDConfig import read_config
@@ -7,7 +6,6 @@ from XL_Chucnang.Connection import send_command
 
 def monitor(client_socket):  # Cập nhật hàm monitor để chấp nhận client_socket_stream
     send_command(client_socket, "VIEW_MONITOR")
-    time.sleep(5)
     
     video_port = 9999
     server_ip, port = read_config()
@@ -24,5 +22,5 @@ def monitor(client_socket):  # Cập nhật hàm monitor để chấp nhận cli
     keyboard.wait('esc')  # Chờ đến khi phím ESC được nhấn
     
     # When You Are Done
-    #server.stop_server()
+    server.stop_server()
 
