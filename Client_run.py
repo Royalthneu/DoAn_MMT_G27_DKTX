@@ -60,8 +60,7 @@ def menu_chinh(client_socket):
             while True:     
                 try:
                     server_ip, port = read_config()  
-                    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    # client_socket.settimeout(3) # Set thời gian chời kết nối ở đây là 3s  
+                    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)                     
                     client_socket.connect((server_ip, port))                    
                     break
                 except socket.error as e:

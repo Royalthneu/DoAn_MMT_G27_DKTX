@@ -23,7 +23,3 @@ def monitor(client_socket):
     # Dừng chia sẻ màn hình
     ssc.stop_stream()
     print("Screen sharing stopped.")   
-    
-    
-        
-    
