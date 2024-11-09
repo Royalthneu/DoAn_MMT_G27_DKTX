@@ -25,7 +25,7 @@ def main():
     if Connection.check_ip_address_valid(server_ip) and Connection.check_port_valid(port):
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.bind((server_ip, port))
-        server_socket.listen(3)  # số lượng kết nối trong 1 thời điểm
+        server_socket.listen(5)  # số lượng kết nối trong 1 thời điểm
         print(f"Server đang lắng nghe tại {server_ip}:{port}")
     else:
         print("IP address hoặc Port không hợp lệ hoặc không mở.")  
@@ -50,7 +50,7 @@ def handle_client(client_socket):
     #Xử lý các lệnh từ client.
     try:
         while True:       
-            buffer = client_socket.recv(1024).decode()              
+            buffer = client_socket.recv(4096).decode()              
             if not buffer:
                 print("Loi ket noi den Client hoac ket noi da dong.")
                 break
@@ -85,7 +85,7 @@ def handle_client(client_socket):
             
             # Xem màn hình hiện thời của máy SERVER
             elif buffer.startswith("VIEW_MONITOR"):
-                Server.SV_monitor.monitor(client_socket)
+                Server.SV_monitor.monitor()
                 
             # Khóa / Bắt phím nhấn (keylogger) ở máy SERVER
             elif buffer.startswith("START_KEYLOGGER"):

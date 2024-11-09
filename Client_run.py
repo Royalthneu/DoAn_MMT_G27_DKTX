@@ -1,5 +1,5 @@
 import socket
-from XL_Chucnang.CRUDConfig import update_config
+from XL_Chucnang.CRUDConfig import read_config, update_config
 from XL_Chucnang.Connection import check_ip_address_valid, check_port_valid
 
 
@@ -9,7 +9,6 @@ import Client.CL_shutdown_reset
 import Client.CL_monitor
 import Client.CL_keylogger
 import Client.CL_del_copy
-
 
 def main():
     while True:
@@ -36,7 +35,9 @@ def main():
     
     # Lưu đỉa chị server và port và config.json
     update_config(server_ip, port)
-      
+    menu_chinh(client_socket)
+    
+def menu_chinh(client_socket):
     while True:
         print("\n- MENU CHINH -")
         print("1. List / Start / Stop cac Applications dang chay SERVER")
@@ -55,7 +56,20 @@ def main():
         elif choice == '3':
             Client.CL_shutdown_reset.shutdown_reset(client_socket)
         elif choice == '4':            
-            Client.CL_monitor.monitor(client_socket)
+            Client.CL_monitor.monitor(client_socket)            
+            while True:     
+                try:
+                    server_ip, port = read_config()  
+                    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    # client_socket.settimeout(3) # Set thời gian chời kết nối ở đây là 3s  
+                    client_socket.connect((server_ip, port))                    
+                    break
+                except socket.error as e:
+                    print(f"Ket noi khong thanh cong: {e}. Vui long kiem tra server co dang chay khong va IP, port co dung khong.")
+                    client_socket.close()
+                    continue
+            menu_chinh(client_socket)
+            
         elif choice == '5':
             Client.CL_keylogger.bat_tat_key_logger(client_socket)
         elif choice == '6':
