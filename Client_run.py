@@ -57,17 +57,17 @@ def menu_chinh(client_socket):
             Client.CL_shutdown_reset.shutdown_reset(client_socket)
         elif choice == '4':            
             Client.CL_monitor.monitor(client_socket)            
-            # while True:     
-            #     try:
-            #         server_ip, port = read_config()  
-            #         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)                     
-            #         client_socket.connect((server_ip, port))                    
-            #         break
-            #     except socket.error as e:
-            #         print(f"Ket noi khong thanh cong: {e}. Vui long kiem tra server co dang chay khong va IP, port co dung khong.")
-            #         client_socket.close()
-            #         continue
-            # menu_chinh(client_socket)
+            while True:     
+                try:
+                    server_ip, port = read_config()  
+                    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)                     
+                    client_socket.connect((server_ip, port))                    
+                    break
+                except socket.error as e:
+                    print(f"Ket noi khong thanh cong: {e}. Vui long kiem tra server co dang chay khong va IP, port co dung khong.")
+                    client_socket.close()
+                    continue
+            menu_chinh(client_socket)
             
         elif choice == '5':
             Client.CL_keylogger.bat_tat_key_logger(client_socket)
