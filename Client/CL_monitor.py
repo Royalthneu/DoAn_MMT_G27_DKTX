@@ -10,9 +10,7 @@ def monitor(client_socket):
     send_command(client_socket, "VIEW_MONITOR")
     
     server_ip, port = read_config()
-    video_port = 9999
-    
-    client3 = ScreenShareClient(server_ip, video_port)
+    client3 = ScreenShareClient(server_ip, port)
 
     # Bắt đầu luồng chia sẻ màn hình trong một luồng riêng biệt
     stream_thread = threading.Thread(target=client3.start_stream)
