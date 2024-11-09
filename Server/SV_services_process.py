@@ -1,4 +1,4 @@
-from Xuly_Chucnang.KetNoi_GiaoTiep import run_powershell_command, send_message, receive_response
+from General.KetNoi_GiaoTiep import run_powershell_command, send_message, receive_response
 
 def server_process(client_socket):    
     while True:     

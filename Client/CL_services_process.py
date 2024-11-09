@@ -1,6 +1,6 @@
 import socket
-from Xuly_Chucnang.CRUD_FileConfig import read_config
-from Xuly_Chucnang.KetNoi_GiaoTiep import receive_response_65535, send_command, receive_response
+from General.CRUD_FileConfig import read_config
+from General.KetNoi_GiaoTiep import receive_response_65535, send_command, receive_response
 
 
 def services_process(client_socket):   

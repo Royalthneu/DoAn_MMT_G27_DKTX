@@ -1,7 +1,6 @@
 import socket
 import threading
-import Xuly_Chucnang
-import Xuly_Chucnang.KetNoi_GiaoTiep as KetNoi_GiaoTiep
+import General.KetNoi_GiaoTiep as KetNoi_GiaoTiep
 import Server.SV_app_process
 import Server.SV_services_process
 import Server.SV_shutdown_reset
@@ -88,7 +87,7 @@ def handle_client(client_socket):
             
             # Xem màn hình hiện thời của máy SERVER
             elif buffer.startswith("VIEW_MONITOR"):
-                Xuly_Chucnang.Monitor.SV_monitor.monitor(client_socket)
+                Server.Monitor.SV_monitor.monitor(client_socket)
                 
             # Khóa / Bắt phím nhấn (keylogger) ở máy SERVER
             elif buffer.startswith("START_KEYLOGGER"):

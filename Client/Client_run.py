@@ -1,8 +1,7 @@
-import Xuly_Chucnang
-import Xuly_Chucnang.KetNoi_GiaoTiep as KetNoi_GiaoTiep
+import General.KetNoi_GiaoTiep as KetNoi_GiaoTiep
 import socket
 
-from Xuly_Chucnang.CRUD_FileConfig import update_config
+from General.CRUD_FileConfig import update_config
 import Client.CL_app_process
 import Client.CL_services_process
 import Client.CL_shutdown_reset
@@ -55,7 +54,7 @@ def main():
         elif choice == '3':
             Client.CL_shutdown_reset.shutdown_reset(client_socket)
         elif choice == '4':            
-            Xuly_Chucnang.Monitor.CL_monitor.monitor(client_socket)
+            Client.Monitor.CL_monitor.monitor(client_socket)
         elif choice == '5':
             Client.CL_keylogger.bat_tat_key_logger(client_socket)
         elif choice == '6':

