@@ -50,7 +50,7 @@ def main():
     Connection.open_port(9999)
     server_socket_stream = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket_stream.bind((server_ip, 9999))
-    server_socket_stream.listen(1)     
+    server_socket_stream.listen(3)     
     
     try:
         while True:
