@@ -12,8 +12,8 @@ def monitor(client_socket):
     video_port = 9999
     
     server_ip, port = read_config()
-    # if not Connection.check_port_open(video_port):
-    #     Connection.open_port(video_port)
+    if not Connection.check_port_open(video_port):
+        Connection.open_port(video_port)
    
     # server_socket_stream = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # server_socket_stream.bind((server_ip, video_port))
