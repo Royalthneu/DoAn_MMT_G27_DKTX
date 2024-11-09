@@ -8,7 +8,7 @@ import Server.SV_shutdown_reset
 import Server.SV_monitor
 import Server.SV_keylogger
 import Server.SV_del_copy
-from vidstream import StreamingServer
+
 
 def main():
     server_ip = socket.gethostbyname(socket.gethostname())
@@ -23,7 +23,7 @@ def main():
         else:
             print(f"Cổng {port} sẽ không được mở. Thoát chương trình.")
             return
-    #Khởi tạo server cho luồng video trên cổng 8081  
+
     if Connection.check_ip_address_valid(server_ip) and Connection.check_port_valid(port):
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.bind((server_ip, port))
@@ -31,46 +31,23 @@ def main():
         print(f"Server đang lắng nghe tại {server_ip}:{port}")
     else:
         print("IP address hoặc Port không hợp lệ hoặc không mở.")  
-       
-    #Khởi tạo server cho luồng video trên cổng 9999
-    Connection.open_port(9999)
-    server_socket_stream = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket_stream.bind((server_ip, 9999))
-    server_socket_stream.listen(3)     
-     
-    def accept_client_port():
-        try:
-            while True:
-                # Chấp nhận kết nối từ client
-                client_socket, addr = server_socket.accept()
-                print(f"Client connected from {addr}") 
-                client_thread = threading.Thread(target=handle_client, args=(client_socket,))
-                client_thread.start()              
-        except KeyboardInterrupt:
-            print("Server is shutting down...")
-        finally:
-            server_socket.close()
-            print("Server stopped.")   
-                
-    def accept_client_stream():   
-        try:
-            while True:
-                # Chấp nhận kết nối từ client
-                client_socket_stream, addr_stream = server_socket_stream.accept() 
-                print(f"Client connected from {addr_stream}")
-                client_thread_stream = threading.Thread(target=start_stream, args=(client_socket_stream,))
-                client_thread_stream.start() 
-        except KeyboardInterrupt:
-            print("Server is shutting down...")
-        finally:
-            client_thread_stream.close()
-            print("Server stopped.")  
+
+    try:
+        while True:
+            # Chấp nhận kết nối từ client
+            client_socket, addr = server_socket.accept()
+            print(f"Client connected from {addr}")
+
+            # Tạo một thread mới để xử lý client
+            client_thread = threading.Thread(target=handle_client, args=(client_socket,))
+            client_thread.start()
+
+    except KeyboardInterrupt:
+        print("Server is shutting down...")
+    finally:
+        server_socket.close()
+        print("Server stopped.")   
     
-    # Khởi chạy các luồng để chấp nhận kết nối cho hai server
-    threading.Thread(target=accept_client_port).start()
-    threading.Thread(target=accept_client_stream).start()
-    
-      
 def handle_client(client_socket):
     #Xử lý các lệnh từ client.
     try:
@@ -80,7 +57,6 @@ def handle_client(client_socket):
                 print("Loi ket noi den Client hoac ket noi da dong.")
                 break
             print(f"Lenh da nhan: {buffer}")
-           
             # List / Start / Stop các Applications đang chạy SERVER
             if buffer.startswith("LIST_APPS_RUNNING"):
                 Server.SV_app_process.list_apps_running(client_socket) 
@@ -110,7 +86,7 @@ def handle_client(client_socket):
             
             # Xem màn hình hiện thời của máy SERVER
             elif buffer.startswith("VIEW_MONITOR"):
-                start_stream()
+                Server.SV_monitor.monitor()
                 
             # Khóa / Bắt phím nhấn (keylogger) ở máy SERVER
             elif buffer.startswith("START_KEYLOGGER"):
@@ -134,22 +110,6 @@ def handle_client(client_socket):
     finally:
         client_socket.close()
         print("Dong ket noi voi may Client.")
-
-def start_stream():   
-    try:
-        server_ip, port = read_config() 
-        server = StreamingServer(server_ip, port)
-        server.start_server()
-        print(f"Video streaming server started at {server_ip}:{port}")
-        
-        while input("") != 'STOP':
-            continue
-        
-        #When You Are Done
-        #server.stop_server()  
-    except Exception as e:
-        print(f"Failed to start video stream server: {e}")
-        
 
 if __name__ == "__main__":
     main()
