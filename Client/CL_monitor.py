@@ -1,26 +1,26 @@
+import socket
 import keyboard
-from vidstream import ScreenShareClient
-import threading
-
-from XL_Chucnang.Connection import  send_command
+from vidstream import StreamingServer
 from XL_Chucnang.CRUDConfig import read_config
+from XL_Chucnang.Connection import send_command
 
-
-def monitor(client_socket):
+def monitor(client_socket):  # Cập nhật hàm monitor để chấp nhận client_socket_stream
     send_command(client_socket, "VIEW_MONITOR")
     
+    video_port = 9999
     server_ip, port = read_config()
-    client3 = ScreenShareClient(server_ip, port)
-
-    # Bắt đầu luồng chia sẻ màn hình trong một luồng riêng biệt
-    stream_thread = threading.Thread(target=client3.start_stream)
-    stream_thread.start()
-
+    
+    # client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+    # client_socket.connect((server_ip, video_port))
+    # print(f"Ket noi server co dia chi {server_ip}:{video_port} thanh cong")
+    
+    server = StreamingServer(server_ip, video_port)
+    server.start_server()
+    
     # Theo dõi phím ESC để dừng chia sẻ màn hình
     print("Press ESC to stop screen sharing.")
     keyboard.wait('esc')  # Chờ đến khi phím ESC được nhấn
-
-    # Dừng chia sẻ màn hình
-    client3.stop_stream()
-    print("Screen sharing stopped.")
     
+    # When You Are Done
+    #server.stop_server()
+

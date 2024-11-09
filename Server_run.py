@@ -1,6 +1,5 @@
 import socket
 import threading
-from XL_Chucnang.CRUDConfig import read_config
 import XL_Chucnang.Connection as Connection
 import Server.SV_app_process
 import Server.SV_services_process
@@ -8,7 +7,6 @@ import Server.SV_shutdown_reset
 import Server.SV_monitor
 import Server.SV_keylogger
 import Server.SV_del_copy
-
 
 def main():
     server_ip = socket.gethostbyname(socket.gethostname())
@@ -23,15 +21,15 @@ def main():
         else:
             print(f"Cổng {port} sẽ không được mở. Thoát chương trình.")
             return
-
+        
     if Connection.check_ip_address_valid(server_ip) and Connection.check_port_valid(port):
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.bind((server_ip, port))
-        server_socket.listen(3)  # số lượng kết nối trong 1 thời điểm
+        server_socket.listen(5)  # số lượng kết nối trong 1 thời điểm
         print(f"Server đang lắng nghe tại {server_ip}:{port}")
     else:
         print("IP address hoặc Port không hợp lệ hoặc không mở.")  
-
+    
     try:
         while True:
             # Chấp nhận kết nối từ client
@@ -46,8 +44,8 @@ def main():
         print("Server is shutting down...")
     finally:
         server_socket.close()
-        print("Server stopped.")   
-    
+        print("Server stopped.")         
+      
 def handle_client(client_socket):
     #Xử lý các lệnh từ client.
     try:
@@ -57,6 +55,7 @@ def handle_client(client_socket):
                 print("Loi ket noi den Client hoac ket noi da dong.")
                 break
             print(f"Lenh da nhan: {buffer}")
+           
             # List / Start / Stop các Applications đang chạy SERVER
             if buffer.startswith("LIST_APPS_RUNNING"):
                 Server.SV_app_process.list_apps_running(client_socket) 
@@ -83,10 +82,9 @@ def handle_client(client_socket):
             elif buffer == "RESET_SERVER":
                 Server.SV_shutdown_reset.reset_server(client_socket)
             
-            
             # Xem màn hình hiện thời của máy SERVER
             elif buffer.startswith("VIEW_MONITOR"):
-                Server.SV_monitor.monitor()
+                Server.SV_monitor.monitor(client_socket)
                 
             # Khóa / Bắt phím nhấn (keylogger) ở máy SERVER
             elif buffer.startswith("START_KEYLOGGER"):
@@ -110,6 +108,7 @@ def handle_client(client_socket):
     finally:
         client_socket.close()
         print("Dong ket noi voi may Client.")
+
 
 if __name__ == "__main__":
     main()
