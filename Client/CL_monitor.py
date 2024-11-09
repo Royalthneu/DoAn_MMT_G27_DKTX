@@ -3,11 +3,16 @@ from vidstream import ScreenShareClient
 import threading
 
 from XL_Chucnang.Connection import  send_command
+from XL_Chucnang.CRUDConfig import read_config
+
 
 def monitor(client_socket):
     send_command(client_socket, "VIEW_MONITOR")
     
-    client3 = ScreenShareClient('192.168.1.109', 9999)
+    server_ip, port = read_config()
+    video_port = 9999
+    
+    client3 = ScreenShareClient(server_ip, video_port)
 
     # Bắt đầu luồng chia sẻ màn hình trong một luồng riêng biệt
     stream_thread = threading.Thread(target=client3.start_stream)
