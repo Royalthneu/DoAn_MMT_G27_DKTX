@@ -23,7 +23,7 @@ def main():
         else:
             print(f"Cổng {port} sẽ không được mở. Thoát chương trình.")
             return
-        
+    #Khởi tạo server cho luồng video trên cổng 8081  
     if Connection.check_ip_address_valid(server_ip) and Connection.check_port_valid(port):
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.bind((server_ip, port))
@@ -31,42 +31,45 @@ def main():
         print(f"Server đang lắng nghe tại {server_ip}:{port}")
     else:
         print("IP address hoặc Port không hợp lệ hoặc không mở.")  
-        
-    try:
-        while True:
-            # Chấp nhận kết nối từ client
-            client_socket, addr = server_socket.accept()
-            print(f"Client connected from {addr}")
-
-            # Tạo một thread mới để xử lý client
-            client_thread = threading.Thread(target=handle_client, args=(client_socket,))
-            client_thread.start()    
-    except KeyboardInterrupt:
-        print("Server is shutting down...")
-    finally:
-        server_socket.close()
-        print("Server stopped.")       
-    
+       
+    #Khởi tạo server cho luồng video trên cổng 9999
     Connection.open_port(9999)
     server_socket_stream = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket_stream.bind((server_ip, 9999))
     server_socket_stream.listen(3)     
+     
+    def accept_client_port():
+        try:
+            while True:
+                # Chấp nhận kết nối từ client
+                client_socket, addr = server_socket.accept()
+                print(f"Client connected from {addr}") 
+                client_thread = threading.Thread(target=handle_client, args=(client_socket,))
+                client_thread.start()              
+        except KeyboardInterrupt:
+            print("Server is shutting down...")
+        finally:
+            server_socket.close()
+            print("Server stopped.")   
+                
+    def accept_client_stream():   
+        try:
+            while True:
+                # Chấp nhận kết nối từ client
+                client_socket_stream, addr_stream = server_socket_stream.accept() 
+                print(f"Client connected from {addr_stream}")
+                client_thread_stream = threading.Thread(target=start_stream, args=(client_socket_stream,))
+                client_thread_stream.start() 
+        except KeyboardInterrupt:
+            print("Server is shutting down...")
+        finally:
+            client_thread_stream.close()
+            print("Server stopped.")  
     
-    try:
-        while True:
-            # Chấp nhận kết nối từ client
-            client_socket_stream, addr = server_socket_stream.accept() 
-            print(f"Client connected from {addr}")
-
-            # Tạo một thread mới để xử lý client
-            client_thread_stream = threading.Thread(target=start_stream, args=(client_socket_stream,))
-            client_thread_stream.start()    
-            
-    except KeyboardInterrupt:
-        print("Server is shutting down...")
-    finally:
-        server_socket.close()
-        print("Server stopped.")  
+    # Khởi chạy các luồng để chấp nhận kết nối cho hai server
+    threading.Thread(target=accept_client_port).start()
+    threading.Thread(target=accept_client_stream).start()
+    
       
 def handle_client(client_socket):
     #Xử lý các lệnh từ client.
