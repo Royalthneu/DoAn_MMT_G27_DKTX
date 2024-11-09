@@ -1,5 +1,5 @@
 import os
-from XuLy_KetNoi_GiaoTiep import send_command, receive_response, replace_path
+from Xuly_Chucnang.KetNoi_GiaoTiep import send_command, receive_response, replace_path
 
 
 def del_copy(client_socket):

@@ -1,4 +1,4 @@
-from XuLy_KetNoi_GiaoTiep import send_command, receive_response
+from Xuly_Chucnang.KetNoi_GiaoTiep import send_command, receive_response
 
 def shutdown_reset(client_socket):   
     while True:

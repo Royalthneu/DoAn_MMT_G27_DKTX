@@ -1,25 +1,25 @@
 import Xuly_Chucnang
-import XuLy_KetNoi_GiaoTiep
+import Xuly_Chucnang.KetNoi_GiaoTiep as KetNoi_GiaoTiep
 import socket
 
-from XuLyFileConfig import update_config
-import Xuly_Chucnang.App_process.CL_app_process
-import Xuly_Chucnang.Services_process.CL_services_process
-import Xuly_Chucnang.Shutdown_reset.CL_shutdown_reset
-import Xuly_Chucnang.Monitor.CL_monitor
-import Xuly_Chucnang.Keylogger.CL_keylogger
-import Xuly_Chucnang.Del_copy.CL_del_copy
+from Xuly_Chucnang.CRUD_FileConfig import update_config
+import Client.CL_app_process
+import Client.CL_services_process
+import Client.CL_shutdown_reset
+import Client.CL_monitor
+import Client.CL_keylogger
+import Client.CL_del_copy
 
 
 def main():
     while True:
         server_ip = input("Dien dia chi IP cua Server: ")
-        if not XuLy_KetNoi_GiaoTiep.check_ip_address_valid(server_ip):
+        if not KetNoi_GiaoTiep.check_ip_address_valid(server_ip):
             print("IP khong hop le. Vui long dien lai.")
             continue
         
         port = int(input("Dien so port: "))
-        if not XuLy_KetNoi_GiaoTiep.check_port_valid(port):
+        if not KetNoi_GiaoTiep.check_port_valid(port):
             print("Port khong hop le. Vui long dien lai.")
             continue
 
@@ -49,17 +49,17 @@ def main():
         choice = input("Enter your choice: ")
 
         if choice == '1':            
-            Xuly_Chucnang.App_process.CL_app_process.app_process(client_socket)
+            Client.CL_app_process.app_process(client_socket)
         elif choice == '2':
-           Xuly_Chucnang.Services_process.CL_services_process.services_process(client_socket)   
+           Client.CL_services_process.services_process(client_socket)   
         elif choice == '3':
-            Xuly_Chucnang.Shutdown_reset.CL_shutdown_reset.shutdown_reset(client_socket)
+            Client.CL_shutdown_reset.shutdown_reset(client_socket)
         elif choice == '4':            
             Xuly_Chucnang.Monitor.CL_monitor.monitor(client_socket)
         elif choice == '5':
-            Xuly_Chucnang.Keylogger.CL_keylogger.bat_tat_key_logger(client_socket)
+            Client.CL_keylogger.bat_tat_key_logger(client_socket)
         elif choice == '6':
-            Xuly_Chucnang.Del_copy.CL_del_copy.del_copy(client_socket)                
+            Client.CL_del_copy.del_copy(client_socket)                
         elif choice == '0':
             client_socket.close()
             print("Disconnected from server.")

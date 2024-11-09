@@ -1,7 +1,7 @@
 import random
 import socket
 import subprocess
-from XuLyFileConfig import read_config, write_config, update_config
+from Xuly_Chucnang.CRUD_FileConfig import read_config, write_config, update_config
 
 def check_ip_address_valid(ip):
     try:

@@ -13,7 +13,7 @@ import os.path
 
 _location = os.path.dirname(__file__)
 
-import DA_UI_support
+import Client.CL_UI_support as CL_UI_support
 
 _bgcolor = '#d9d9d9'
 _fgcolor = '#000000'
@@ -27,7 +27,7 @@ _style_code_ran = 0
 def _style_code():
     global _style_code_ran
     if _style_code_ran: return        
-    try: DA_UI_support.root.tk.call('source',
+    try: CL_UI_support.root.tk.call('source',
                 os.path.join(_location, 'themes', 'default.tcl'))
     except: pass
     style = ttk.Style()
@@ -45,8 +45,8 @@ class run_Client:
         top.geometry("375x529+11+283")
         top.minsize(120, 1)
         top.maxsize(5564, 1901)
-        top.resizable(1,  1)
-        top.title("MÀN HÌNH SERVER")
+        top.resizable(0,  0)
+        top.title("RUN CLIENT")
         top.configure(background="#d9d9d9")
         top.configure(highlightbackground="#d9d9d9")
         top.configure(highlightcolor="#000000")
@@ -112,7 +112,7 @@ class run_Server:
         top.geometry("369x83+24+119")
         top.minsize(120, 1)
         top.maxsize(5564, 1901)
-        top.resizable(1, 1)
+        top.resizable(0, 0)
         top.title("RUN SERVER")
         top.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="#000000")
 
@@ -169,7 +169,7 @@ class CL_app_process:
         top.geometry("399x300+427+120")
         top.minsize(120, 1)
         top.maxsize(5564, 1901)
-        top.resizable(1, 1)
+        top.resizable(0, 0)
         top.title("APPLICATIONS PROCESS")
         top.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="#000000")
         self.top = top
@@ -199,12 +199,12 @@ class CL_monitor:
         top.geometry("858x510+423+480")
         top.minsize(120, 1)
         top.maxsize(5564, 1901)
-        top.resizable(1, 1)
+        top.resizable(0, 0)
         top.title("VIEW SERVER SCREEN")
         top.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="#000000")
         self.top = top
 
-        self.Label5 = create_label(self.top, "ẢNH CHỤP THỜI ĐIỂM:", 0.268, 0.02, 138, 28)
+        self.Label5 = create_label(self.top, "SNAPSHOT TIME:", 0.268, 0.02, 138, 28)
         self.lbl_time = create_label(self.top, "DD/MM/YYYY hh:mm:ss", 0.42, 0.02, 158, 28)
 
 class CL_shutdown_reset:
@@ -213,7 +213,7 @@ class CL_shutdown_reset:
         top.geometry("374x110+13+884")
         top.minsize(120, 1)
         top.maxsize(5564, 1901)
-        top.resizable(1, 1)
+        top.resizable(0, 0)
         top.title("SHUTDOWN RESET SERVER")
         top.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="#000000")
         self.top = top
@@ -221,6 +221,20 @@ class CL_shutdown_reset:
         self.btn_cl_shutdown_sv = create_button(self.top, "SHUT DOWN SERVER", 0.246, 0.091, 167, 36, cursor="fleur")
         self.btn_cl_reset_sv = create_button(self.top, "RESET SERVER", 0.246, 0.545, 167, 36, cursor="fleur")
 
+class CL_del_copy:
+    def __init__(self, top=None):
+        '''This class configures and populates the toplevel window.'''
+        top.geometry("420x110+1350+670")
+        top.minsize(120, 1)
+        top.maxsize(5564, 1901)
+        top.resizable(0, 0)
+        top.title("DELETE COPY")
+        top.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="#000000")
+        self.top = top
+
+        self.btn_cl_del_sv = create_button(self.top, "DELELE FILE ON SERVER", 0.246, 0.091, 200, 36, cursor="fleur")
+        self.btn_cl_copy_sv = create_button(self.top, "COPY FILE FROM SERVER", 0.246, 0.545, 200, 36, cursor="fleur")
+        self.btn_cl_paste_cl = create_button(self.top, "PASTE FILE TO CLIENT", 0.246, 0.999, 200, 36, cursor="fleur")
 
 class CL_services_process:
     def __init__(self, top=None):
@@ -228,7 +242,7 @@ class CL_services_process:
         top.geometry("420x300+853+120")
         top.minsize(120, 1)
         top.maxsize(5564, 1901)
-        top.resizable(1,  1)
+        top.resizable(0,  0)
         top.title("SERVICES PROCESS")
         top.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="#000000")
 
@@ -257,13 +271,13 @@ class CL_services_process:
         setattr(self, name, button)
 
 
-class CL_services_process_1:
+class CL_keylogger:
     def __init__(self, top=None):
         '''This class configures and populates the toplevel window.'''
         top.geometry("637x489+1307+122")
         top.minsize(120, 1)
         top.maxsize(5564, 1901)
-        top.resizable(1,  1)
+        top.resizable(0,  0)
         top.title("SERVICES PROCESS")
         top.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="#000000")
 
@@ -398,10 +412,10 @@ def _on_shiftmouse(event, widget):
         elif event.num == 5:
             widget.xview_scroll(1, 'units')
 def start_up():
-    DA_UI_support.main()
+    CL_UI_support.main()
 
 if __name__ == '__main__':
-    DA_UI_support.main()
+    CL_UI_support.main()
 
 
 
