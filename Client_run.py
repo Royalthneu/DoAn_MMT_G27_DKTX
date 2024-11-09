@@ -1,7 +1,8 @@
-import General.KetNoi_GiaoTiep as KetNoi_GiaoTiep
 import socket
+from XL_Chucnang.CRUDConfig import update_config
+from XL_Chucnang.Connection import check_ip_address_valid, check_port_valid
 
-from General.CRUD_FileConfig import update_config
+
 import Client.CL_app_process
 import Client.CL_services_process
 import Client.CL_shutdown_reset
@@ -13,12 +14,12 @@ import Client.CL_del_copy
 def main():
     while True:
         server_ip = input("Dien dia chi IP cua Server: ")
-        if not KetNoi_GiaoTiep.check_ip_address_valid(server_ip):
+        if not check_ip_address_valid(server_ip):
             print("IP khong hop le. Vui long dien lai.")
             continue
         
         port = int(input("Dien so port: "))
-        if not KetNoi_GiaoTiep.check_port_valid(port):
+        if not check_port_valid(port):
             print("Port khong hop le. Vui long dien lai.")
             continue
 
@@ -50,11 +51,11 @@ def main():
         if choice == '1':            
             Client.CL_app_process.app_process(client_socket)
         elif choice == '2':
-           Client.CL_services_process.services_process(client_socket)   
+            Client.CL_services_process.services_process(client_socket)   
         elif choice == '3':
             Client.CL_shutdown_reset.shutdown_reset(client_socket)
         elif choice == '4':            
-            Client.Monitor.CL_monitor.monitor(client_socket)
+            Client.CL_monitor.monitor(client_socket)
         elif choice == '5':
             Client.CL_keylogger.bat_tat_key_logger(client_socket)
         elif choice == '6':

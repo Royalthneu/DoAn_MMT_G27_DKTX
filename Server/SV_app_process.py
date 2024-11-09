@@ -2,8 +2,8 @@
 import os
 import socket
 import subprocess
-from General.CRUD_FileConfig import read_config
-from General.KetNoi_GiaoTiep import replace_path, send_command, send_error_message, receive_response
+from XL_Chucnang.CRUDConfig import read_config
+from XL_Chucnang.Connection import replace_path, send_command, send_error_message, receive_response
 
 def app_process():     
     server_ip, port = read_config()

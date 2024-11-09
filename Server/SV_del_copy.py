@@ -1,5 +1,5 @@
 import os
-from General.KetNoi_GiaoTiep import send_command
+from XL_Chucnang.Connection import send_command
 
 def delete_file(client_socket, file_path):
     # Xóa file tại đường dẫn được chỉ định trên server.

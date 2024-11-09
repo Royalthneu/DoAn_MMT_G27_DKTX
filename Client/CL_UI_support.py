@@ -5,10 +5,9 @@
 #  in conjunction with Tcl version 8.6
 #    Nov 09, 2024 02:33:45 AM +07  platform: Windows NT
 
-import sys
 import tkinter as tk
-import tkinter.ttk as ttk
-from tkinter.constants import *
+# import tkinter.ttk as ttk
+# from tkinter.constants import 
 
 import CL_UI
 

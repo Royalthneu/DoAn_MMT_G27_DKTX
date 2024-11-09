@@ -1,6 +1,6 @@
 import socket
 import threading
-import General.KetNoi_GiaoTiep as KetNoi_GiaoTiep
+import XL_Chucnang.Connection as Connection
 import Server.SV_app_process
 import Server.SV_services_process
 import Server.SV_shutdown_reset
@@ -13,18 +13,18 @@ import Server.SV_del_copy
 def main():
     server_ip = socket.gethostbyname(socket.gethostname())
     port = 8081
-    if KetNoi_GiaoTiep.check_port_open(port):
+    if Connection.check_port_open(port):
         print(f"\nCổng {port} đã được mở.")
     else:
         # Nếu cổng chưa mở, hỏi người dùng có muốn mở không
         response = input(f"Cổng {port} chưa mở. Bạn có muốn mở cổng {port} không? (y/n): ")
         if response.lower() == 'y':
-            KetNoi_GiaoTiep.open_port(port)
+            Connection.open_port(port)
         else:
             print(f"Cổng {port} sẽ không được mở. Thoát chương trình.")
             return
         
-    if KetNoi_GiaoTiep.check_ip_address_valid(server_ip) and KetNoi_GiaoTiep.check_port_valid(port):
+    if Connection.check_ip_address_valid(server_ip) and Connection.check_port_valid(port):
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.bind((server_ip, port))
         server_socket.listen(3)  # số lượng kết nối trong 1 thời điểm
@@ -87,7 +87,7 @@ def handle_client(client_socket):
             
             # Xem màn hình hiện thời của máy SERVER
             elif buffer.startswith("VIEW_MONITOR"):
-                Server.Monitor.SV_monitor.monitor(client_socket)
+                Server.SV_monitor.monitor(client_socket)
                 
             # Khóa / Bắt phím nhấn (keylogger) ở máy SERVER
             elif buffer.startswith("START_KEYLOGGER"):

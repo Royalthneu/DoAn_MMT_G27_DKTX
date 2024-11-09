@@ -1,7 +1,7 @@
 import random
 import socket
 import subprocess
-from Xuly_Chucnang.CRUD_FileConfig import read_config, write_config, update_config
+from XL_Chucnang.CRUDConfig import read_config, write_config, update_config
 
 def check_ip_address_valid(ip):
     try:
@@ -116,10 +116,6 @@ def is_server_running(server_ip, port):
         return True
     except socket.error:
         return False
-
-import json
-import os
-import subprocess
 
 def send_command(socket, command):
     #Gửi câu lệnh từ client/server đến server/client.

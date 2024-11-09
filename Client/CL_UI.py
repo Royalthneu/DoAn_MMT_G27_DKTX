@@ -13,7 +13,7 @@ import os.path
 
 _location = os.path.dirname(__file__)
 
-import Client.CL_UI_support as CL_UI_support
+import CL_UI_support
 
 _bgcolor = '#d9d9d9'
 _fgcolor = '#000000'
