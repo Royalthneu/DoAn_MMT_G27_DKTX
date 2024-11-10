@@ -11,6 +11,10 @@ import Client.CL_keylogger
 import Client.CL_del_copy
 
 def main():
+    client_ip = socket.gethostbyname(socket.gethostname())
+    print("Client ")
+    update_config("SV_addr_config.json",client_ip, 6789)    
+    
     while True:
         server_ip = input("Dien dia chi IP cua Server: ")
         if not check_ip_address_valid(server_ip):
@@ -24,7 +28,6 @@ def main():
 
         try:
             client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            # client_socket.settimeout(3) # Set thời gian chời kết nối ở đây là 3s  
             client_socket.connect((server_ip, port))
             print(f"Ket noi server co dia chi {server_ip}:{port} thanh cong")
             break
@@ -34,7 +37,7 @@ def main():
             continue
     
     # Lưu đỉa chị server và port và config.json
-    update_config(server_ip, port)
+    update_config("SV_addr_config.json",server_ip, port)
     menu_chinh(client_socket)
     
 def menu_chinh(client_socket):
@@ -59,7 +62,7 @@ def menu_chinh(client_socket):
             Client.CL_monitor.monitor(client_socket)            
             while True:     
                 try:
-                    server_ip, port = read_config()  
+                    server_ip, port = read_config("SV_addr_config.json")  
                     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)                     
                     client_socket.connect((server_ip, port))                    
                     break

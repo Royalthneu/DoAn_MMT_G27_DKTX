@@ -6,7 +6,7 @@ from XL_Chucnang.CRUDConfig import read_config
 from XL_Chucnang.Connection import replace_path, send_command, send_error_message, receive_response
 
 def app_process():     
-    server_ip, port = read_config()
+    server_ip, port = read_config("SV_addr_config.json")
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((server_ip, port))  
     server_socket.listen(1)    

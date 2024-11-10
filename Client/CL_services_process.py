@@ -40,7 +40,7 @@ def stop_service(client_socket):
     print(receive_response(client_socket))
 
 if __name__ == "__main__":    
-    server_ip, port = read_config()
+    server_ip, port = read_config("SV_addr_config.json")
     if server_ip is None or port is None:
         print("Khong the lay IP va Port từ file config.json. Vui long kiem tra file config.json.")
     else:        

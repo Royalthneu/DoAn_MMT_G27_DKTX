@@ -2,16 +2,14 @@
 import json
 import os
 
-CONFIG_FILE = "config.json"
-
 # Kiểm tra xem file JSON có tồn tại không
-def check_config_file():
-    return os.path.exists(CONFIG_FILE)
+def check_config_file(CONFIG_FILE):
+    return os.path.exists(str(CONFIG_FILE))
 
 # Đọc cấu hình từ file JSON
-def read_config():
+def read_config(CONFIG_FILE):
     try:
-        with open("config.json", "r") as file:
+        with open(str(CONFIG_FILE), "r") as file:
             config = json.load(file)
         return config.get("server_ip"), config.get("port")
     except json.JSONDecodeError:
@@ -22,19 +20,19 @@ def read_config():
         return None, None
 
 # Ghi cấu hình mới vào file JSON
-def write_config(server_ip, port):
+def write_config(CONFIG_FILE, server_ip, port):
     config = {
         "server_ip": server_ip,
         "port": port
     }
-    with open(CONFIG_FILE, "w") as file:
+    with open(str(CONFIG_FILE), "w") as file:
         json.dump(config, file, indent=4)
     print(f"Configuration saved: IP = {server_ip}, Port = {port}")
 
 
 # Cập nhật cấu hình trong file JSON
-def update_config(server_ip, port):
-    if check_config_file():
+def update_config(CONFIG_FILE, server_ip, port):
+    if check_config_file(CONFIG_FILE):
         with open(CONFIG_FILE, "r") as file:
             config = json.load(file)
         # Cập nhật giá trị mới
@@ -42,7 +40,7 @@ def update_config(server_ip, port):
         config["port"] = port
         with open(CONFIG_FILE, "w") as file:
             json.dump(config, file, indent=4)
-        print(f"Configuration updated: IP = {server_ip}, Port = {port}")
+        print(f" configuration updated: IP = {server_ip}, Port = {port}")
     else:
         print("Configuration file does not exist.")
         create_file = input("Would you like to create a new configuration file? (y/n): ").strip().lower()

@@ -60,7 +60,7 @@ def start_app_by_path(client_socket):
     
 # Khởi tạo socket và gọi hàm
 if __name__ == "__main__":  
-    server_ip, port = read_config()  
+    server_ip, port = read_config("SV_addr_config.json")  
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((server_ip, port))  # Địa chỉ IP và port của server
     app_process(client_socket)

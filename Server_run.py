@@ -24,7 +24,7 @@ def main():
         
     if Connection.check_ip_address_valid(server_ip) and Connection.check_port_valid(port):
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server_socket.bind(('', port))
+        server_socket.bind((server_ip, port))
         server_socket.listen(5)  # số lượng kết nối trong 1 thời điểm
         print(f"Server đang lắng nghe tại {server_ip}:{port}")
     else:

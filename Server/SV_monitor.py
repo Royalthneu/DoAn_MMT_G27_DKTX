@@ -1,38 +1,21 @@
+import json
 import socket
+import subprocess
 import keyboard
 from vidstream import ScreenShareClient
 import threading
 
 from XL_Chucnang import Connection
-from XL_Chucnang.Connection import send_command
+from XL_Chucnang.Connection import check_port_open, open_port
 from XL_Chucnang.CRUDConfig import read_config
 
 
-def monitor(client_socket):    
-    video_port = 9999
+def monitor(client_socket):   
+    client_ip, port = read_config("SV_addr_config.json")    
+    # if not check_port_open(video_port):
+    #     open_port(video_port)
     
-    server_ip, port = read_config()
-    if not Connection.check_port_open(video_port):
-        Connection.open_port(video_port)
-   
-    # server_socket_stream = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # server_socket_stream.bind((server_ip, video_port))
-    # server_socket_stream.listen(3) 
-    
-    # try:
-    #     while True:            
-    #         client_socket, addr = server_socket_stream.accept()
-    #         client_thread = threading.Thread(target=monitor, args=(client_socket,))
-    #         client_thread.start()
-    # except KeyboardInterrupt:
-    #     print("Server is shutting down...")
-    # finally:
-    #     server_socket_stream.close()
-    #     print("Server stopped.")       
-    
-    client_view_stream = ScreenShareClient(str(server_ip), video_port)
-
-    # Bắt đầu luồng chia sẻ màn hình trong một luồng riêng biệt
+    client_view_stream = ScreenShareClient(client_ip, 6789)
     stream_thread_stream = threading.Thread(target=client_view_stream.start_stream)
     stream_thread_stream.start()
     
@@ -45,4 +28,6 @@ def monitor(client_socket):
 
     # Dừng chia sẻ màn hình
     client_view_stream.stop_stream()
-    print("Screen sharing stopped.")
+    print("Screen sharing stopped.")    
+
+
