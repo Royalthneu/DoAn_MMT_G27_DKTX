@@ -59,7 +59,7 @@ def menu_chinh(client_socket):
         elif choice == '3':
             Client.CL_shutdown_reset.shutdown_reset(client_socket)
         elif choice == '4':            
-            Client.CL_monitor.monitor(client_socket)            
+            Client.CL_monitor.monitor(1)            
             while True:     
                 try:
                     server_ip, port = read_config("SV_addr_config.json")  

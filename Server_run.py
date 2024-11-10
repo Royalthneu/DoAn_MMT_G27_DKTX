@@ -84,7 +84,7 @@ def handle_client(client_socket):
             
             # Xem màn hình hiện thời của máy SERVER
             elif buffer.startswith("VIEW_MONITOR"):
-                Server.SV_monitor.monitor(client_socket)
+                Server.SV_monitor.monitor(1)
                 
             # Khóa / Bắt phím nhấn (keylogger) ở máy SERVER
             elif buffer.startswith("START_KEYLOGGER"):

@@ -10,7 +10,7 @@ def monitor(client_socket):  # Cập nhật hàm monitor để chấp nhận cli
     
     client_ip, port = read_config("CL_addr_config.json")
     
-    server = StreamingServer(client_ip, 6789)
+    server = StreamingServer(str(client_ip), 6789)
     server.start_server()
     
     # Theo dõi phím ESC để dừng chia sẻ màn hình
