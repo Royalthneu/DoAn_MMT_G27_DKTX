@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
 # Hàm tạo cửa sổ con 1
 def create_app_process_window():
-    create_window("APPLICATION_PROCESS", CL_UI.CL_app_process)
+    create_window("APPLICATIONS_PROCESS", CL_UI.CL_app_process)
     
 # Hàm tạo cửa sổ con 2
 def create_sevices_window():
@@ -53,6 +53,7 @@ def show_window(window_name, create_window_func):
         # Nếu cửa sổ chưa được mở hoặc đã đóng, tạo cửa sổ mới và khóa cửa sổ cha
         window = create_window_func()
         window.grab_set()  # Khóa cửa sổ cha cho đến khi cửa sổ con đóng
+        window.focus_set() # Đưa cửa sổ con lên và cho phép nhập ngay
         window_status[window_name] = window
     else:
         # Nếu cửa sổ vẫn mở, chỉ cần kích hoạt nó
@@ -70,6 +71,10 @@ def create_window(window_name, create_func):
     create_func(top)
     # Xử lý khi đóng cửa sổ con
     top.protocol("WM_DELETE_WINDOW", lambda: close_window(window_name, top))
+    # Nhấn Esc để thoát màn hình
+    top.bind("<Escape>", lambda event: close_window(window_name, top))
+    top.grab_set()
+    top.focus_force()
     return top
 
 
