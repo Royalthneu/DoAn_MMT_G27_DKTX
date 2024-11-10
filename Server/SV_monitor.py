@@ -11,7 +11,7 @@ from XL_Chucnang.CRUDConfig import read_config
 
 
 def monitor(client_socket):   
-    client_ip, port = read_config("SV_addr_config.json")    
+    client_ip, port = read_config("CL_addr_config.json")    
     # if not check_port_open(video_port):
     #     open_port(video_port)
     
