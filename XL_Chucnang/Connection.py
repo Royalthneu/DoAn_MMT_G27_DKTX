@@ -1,7 +1,6 @@
 import random
 import socket
 import subprocess
-from XL_Chucnang.CRUDConfig import read_config, write_config, update_config
 
 def check_ip_address_valid(ip):
     try:
@@ -76,46 +75,30 @@ def input_ip_port(prompt_ip, prompt_port):
         
         return ip, port
 
-def get_server_config():
-    # Đọc thông tin IP và port từ file cấu hình
-    server_ip, port = read_config()
-
-    if not server_ip or not port:
-        print("Cấu hình IP và Port chưa tồn tại. Vui lòng nhập thông tin IP và Port.")
-        server_ip, port = input_ip_port("Nhập địa chỉ IP của server: ", " - Nhập port của server: ")
+# def verify_server_connection(server_ip, port):
+#     # Kiểm tra xem server có chạy hay không
+#     if not is_server_running(server_ip, port):
+#         print(f"Server tại {server_ip}:{port} không thể kết nối.")
+#         server_ip, port = input_ip_port("Nhập lại IP của server: ", "Nhập lại port của server: ")
         
-        # Lưu thông tin vào file cấu hình
-        write_config(server_ip, port)
-        print(f"Lưu vào file config.json: IP = {server_ip}, Port = {port}")
-    else:
-        print(f"Sử dụng IP = {server_ip}, Port = {port} từ file config.json")
-    
-    return server_ip, port
+#         # Kiểm tra lại kết nối với server sau khi nhập lại
+#         if is_server_running(server_ip, port):
+#             update_config(server_ip, port)
+#             print(f"Đã kết nối thành công đến server {server_ip}:{port}!")
+#         else:
+#             print(f"Server tại {server_ip}:{port} vẫn không thể kết nối.")
+#     else:
+#         print(f"Đã kết nối thành công với server {server_ip}:{port}!")
 
-def verify_server_connection(server_ip, port):
-    # Kiểm tra xem server có chạy hay không
-    if not is_server_running(server_ip, port):
-        print(f"Server tại {server_ip}:{port} không thể kết nối.")
-        server_ip, port = input_ip_port("Nhập lại IP của server: ", "Nhập lại port của server: ")
-        
-        # Kiểm tra lại kết nối với server sau khi nhập lại
-        if is_server_running(server_ip, port):
-            update_config(server_ip, port)
-            print(f"Đã kết nối thành công đến server {server_ip}:{port}!")
-        else:
-            print(f"Server tại {server_ip}:{port} vẫn không thể kết nối.")
-    else:
-        print(f"Đã kết nối thành công với server {server_ip}:{port}!")
-
-def is_server_running(server_ip, port):
-    try:
-        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client_socket.settimeout(3)  # Đặt timeout kết nối là 3 giây
-        client_socket.connect((server_ip, port))
-        client_socket.close()
-        return True
-    except socket.error:
-        return False
+# def is_server_running(server_ip, port):
+#     try:
+#         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#         client_socket.settimeout(3)  # Đặt timeout kết nối là 3 giây
+#         client_socket.connect((server_ip, port))
+#         client_socket.close()
+#         return True
+#     except socket.error:
+#         return False
 
 def send_command(socket, command):
     #Gửi câu lệnh từ client/server đến server/client.

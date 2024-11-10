@@ -2,14 +2,14 @@
 import os
 import socket
 import subprocess
-from XL_Chucnang.CRUDConfig import read_config
+from XL_Chucnang.CRUDConfig import read_config_server
 from XL_Chucnang.Connection import replace_path, send_command, send_error_message, receive_response
 
 def app_process():     
-    server_ip, port = read_config("SV_addr_config.json")
+    server_ip, server_port = read_config_server("config.json")
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind((server_ip, port))  
-    server_socket.listen(1)    
+    server_socket.bind((server_ip, server_port))  
+    server_socket.listen(2)    
     while True:
         client_socket = server_socket.accept()
         

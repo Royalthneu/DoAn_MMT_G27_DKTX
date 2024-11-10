@@ -1,4 +1,4 @@
-from XL_Chucnang.CRUDConfig import read_config
+from XL_Chucnang.CRUDConfig import read_config_server
 from XL_Chucnang.Connection import receive_response_65535, send_command, receive_response
 import socket
 
@@ -60,9 +60,9 @@ def start_app_by_path(client_socket):
     
 # Khởi tạo socket và gọi hàm
 if __name__ == "__main__":  
-    server_ip, port = read_config("SV_addr_config.json")  
+    server_ip, server_port = read_config_server("config.json")  
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect((server_ip, port))  # Địa chỉ IP và port của server
+    client_socket.connect((server_ip, server_port))  # Địa chỉ IP và port của server
     app_process(client_socket)
     client_socket.close()
     

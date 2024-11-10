@@ -10,23 +10,23 @@ import Server.SV_del_copy
 
 def main():
     server_ip = socket.gethostbyname(socket.gethostname())
-    port = 8081
-    if Connection.check_port_open(port):
-        print(f"\nCổng {port} đã được mở.")
+    server_port = 8081
+    if Connection.check_port_open(server_port):
+        print(f"\nCổng {server_port} đã được mở.")
     else:
         # Nếu cổng chưa mở, hỏi người dùng có muốn mở không
-        response = input(f"Cổng {port} chưa mở. Bạn có muốn mở cổng {port} không? (y/n): ")
+        response = input(f"Cổng {server_port} chưa mở. Bạn có muốn mở cổng {server_port} không? (y/n): ")
         if response.lower() == 'y':
-            Connection.open_port(port)
+            Connection.open_port(server_port)
         else:
-            print(f"Cổng {port} sẽ không được mở. Thoát chương trình.")
+            print(f"Cổng {server_port} sẽ không được mở. Thoát chương trình.")
             return
         
-    if Connection.check_ip_address_valid(server_ip) and Connection.check_port_valid(port):
+    if Connection.check_ip_address_valid(server_ip) and Connection.check_port_valid(server_port):
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server_socket.bind((server_ip, port))
+        server_socket.bind((server_ip, server_port))
         server_socket.listen(5)  # số lượng kết nối trong 1 thời điểm
-        print(f"Server đang lắng nghe tại {server_ip}:{port}")
+        print(f"Server đang lắng nghe tại {server_ip}:{server_port}")
     else:
         print("IP address hoặc Port không hợp lệ hoặc không mở.")  
     
@@ -84,7 +84,7 @@ def handle_client(client_socket):
             
             # Xem màn hình hiện thời của máy SERVER
             elif buffer.startswith("VIEW_MONITOR"):
-                Server.SV_monitor.monitor(1)
+                Server.SV_monitor.monitor(client_socket)
                 
             # Khóa / Bắt phím nhấn (keylogger) ở máy SERVER
             elif buffer.startswith("START_KEYLOGGER"):

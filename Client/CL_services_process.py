@@ -1,5 +1,5 @@
 import socket
-from XL_Chucnang.CRUDConfig import read_config
+from XL_Chucnang.CRUDConfig import read_config_server
 from XL_Chucnang.Connection import receive_response_65535, send_command, receive_response
 
 
@@ -40,13 +40,13 @@ def stop_service(client_socket):
     print(receive_response(client_socket))
 
 if __name__ == "__main__":    
-    server_ip, port = read_config("SV_addr_config.json")
-    if server_ip is None or port is None:
+    server_ip, server_port = read_config_server("config.json")
+    if server_ip is None or server_port is None:
         print("Khong the lay IP va Port từ file config.json. Vui long kiem tra file config.json.")
     else:        
         try:
             client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            client_socket.connect((server_ip, port))  # Dùng IP và port từ file config.json
+            client_socket.connect((server_ip, server_port))  # Dùng IP và port từ file config.json
             services_process(client_socket)
             client_socket.close()
         except socket.error as e:
