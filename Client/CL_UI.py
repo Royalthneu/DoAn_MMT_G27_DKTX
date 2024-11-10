@@ -59,8 +59,8 @@ class run_Client:
 
         # Button definitions
         buttons = [
-            (0.08, 0.378, 36, 317, "1. List / Start / Stop cac Applications dang chay SERVER", test_btn_click),            
-            (0.08, 0.469, 36, 317, "2. List / Start / Stop cac Services dang chay SERVER", test_btn_click),
+            (0.08, 0.378, 36, 317, "1. List / Start / Stop cac Applications dang chay SERVER", lambda: UI_CRUD.show_window("app_process", UI_CRUD.create_app_process_window)),            
+            (0.08, 0.469, 36, 317, "2. List / Start / Stop cac Services dang chay SERVER", lambda: UI_CRUD.show_window("monitor", UI_CRUD.create_del_copy_window)),
             (0.08, 0.561, 36, 317, "3. Shutdown / Reset may SERVER", test_btn_click),
             (0.08, 0.654, 36, 317, "4. Xem man hinh hien thoi cua may SERVER", test_btn_click),
             (0.08, 0.749, 36, 317, "5. Khoa / Bat phim nhan (keylogger) o may SERVER", test_btn_click),
@@ -124,6 +124,15 @@ def create_label(parent, text, relx, rely, width, height, font="-family {Segoe U
     lbl.place(relx=relx, rely=rely, width=width, height=height)
     return lbl
 
+# Hàm tạo Entry
+def create_entry(parent, relx, rely, relwidth, height):
+    entry = tk.Entry(parent)
+    entry.place(relx=relx, rely=rely, relwidth=relwidth, height=height)
+    entry.configure(background="white", disabledforeground="#a3a3a3", font="-family {Courier New} -size 10",
+                    foreground="#000000", highlightbackground="#d9d9d9", highlightcolor="#000000", insertbackground="#000000",
+                    selectbackground="#d9d9d9", selectforeground="black")
+    return entry
+
 class CL_app_process:
     def __init__(self, top=None):
         '''This class configures and populates the toplevel window.'''
@@ -184,18 +193,35 @@ class CL_shutdown_reset:
 
 class CL_del_copy:
     def __init__(self, top=None):
-        '''This class configures and populates the toplevel window.'''
-        top.geometry("420x110+1350+670")
+        top.geometry("637x207+1315+693")
         top.minsize(120, 1)
         top.maxsize(5564, 1901)
-        top.resizable(0, 0)
-        top.title("DELETE COPY")
-        top.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="#000000")
-        self.top = top
+        top.resizable(1, 1)
+        top.title("DELETE-COPY")
+        top.configure(background="#d9d9d9")
+        top.configure(highlightbackground="#d9d9d9")
+        top.configure(highlightcolor="#000000")
 
-        self.btn_cl_del_sv = create_button(self.top, "DELELE FILE ON SERVER", 0.246, 0.091, 200, 36, cursor="fleur")
-        self.btn_cl_copy_sv = create_button(self.top, "COPY FILE FROM SERVER", 0.246, 0.545, 200, 36, cursor="fleur")
-        self.btn_cl_paste_cl = create_button(self.top, "PASTE FILE TO CLIENT", 0.246, 0.999, 200, 36, cursor="fleur")
+        self.top = top
+        _style_code()
+        self.TSeparator3 = ttk.Separator(self.top)
+        self.TSeparator3.place(relx=0.0, rely=0.391, relwidth=1.008)
+
+        # Sử dụng create_label để tạo các Label
+        self.Label4 = create_label(self.top, "PATH FILE", 0.016, 0.193, 66, 16)
+        self.Label4_1 = create_label(self.top, "SOURCE FILE", 0.016, 0.483, 76, 16)
+        self.Label4_1_1 = create_label(self.top, "DESTINATION", 0.016, 0.725, 82, 16)
+        self.Label4_1_1_1 = create_label(self.top, "FOLDER", 0.031, 0.821, 53, 16)
+
+        # Sử dụng create_entry để tạo các Entry
+        self.Entry1_1_1 = create_entry(self.top, 0.157, 0.725, 0.666, 40)
+        self.Entry1_1 = create_entry(self.top, 0.157, 0.435, 0.666, 40)
+        self.Entry1 = create_entry(self.top, 0.126, 0.145, 0.697, 40)
+
+        # Sử dụng create_button để tạo các Button
+        self.btn_paste_destination = create_button(self.top, "PASTE", 0.848, 0.725, 87, 36, cursor="fleur")
+        self.btn_copy_file = create_button(self.top, "COPY", 0.848, 0.435, 87, 36, cursor="fleur")
+        self.btn_del_file = create_button(self.top, "DELETE", 0.848, 0.145, 87, 36, cursor="fleur")
 
 class CL_services_process:
     def __init__(self, top=None):
@@ -239,7 +265,7 @@ class CL_keylogger:
         top.minsize(120, 1)
         top.maxsize(5564, 1901)
         top.resizable(0,  0)
-        top.title("SERVICES PROCESS")
+        top.title("KEYLOGGER")
         top.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="#000000")
 
         self.top = top
