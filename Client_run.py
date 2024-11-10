@@ -14,8 +14,6 @@ import Client.CL_del_copy
 def main():
     client_ip = socket.gethostbyname(socket.gethostname())
     client_port = 6789
-    print("Client ")
-    update_config("config.json", client_ip=client_ip, client_port=client_port)
 
     while True:
         server_ip = input("Dien dia chi IP cua Server: ")
@@ -32,15 +30,22 @@ def main():
             client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             client_socket.connect((server_ip, sever_port))
             print(f"Ket noi server co dia chi {server_ip}:{sever_port} thanh cong")
+            # Lưu đỉa chị server và port và config.json
+            update_config(
+                "config.json",
+                server_ip=f"{server_ip}",
+                server_port=sever_port,
+                client_ip=f"{client_ip}",
+                client_port=client_port,
+            )
             menu_chinh(client_socket)
             break
         except socket.error as e:
-            print(f"Ket noi khong thanh cong: {e}. Vui long kiem tra server co dang chay khong va IP, port co dung khong.")
+            print(
+                f"Ket noi khong thanh cong: {e}. Vui long kiem tra server co dang chay khong va IP, port co dung khong."
+            )
             client_socket.close()
             continue
-
-    # Lưu đỉa chị server và port và config.json
-    update_config("config.json", server_ip = server_ip, server_port = sever_port)
 
 
 def menu_chinh(client_socket):
@@ -70,7 +75,9 @@ def menu_chinh(client_socket):
                     client_socket.connect((server_ip, server_port))
                     break
                 except socket.error as e:
-                    print(f"Ket noi khong thanh cong: {e}. Vui long kiem tra server co dang chay khong va IP, port co dung khong.")
+                    print(
+                        f"Ket noi khong thanh cong: {e}. Vui long kiem tra server co dang chay khong va IP, port co dung khong."
+                    )
                     client_socket.close()
                     continue
             menu_chinh(client_socket)

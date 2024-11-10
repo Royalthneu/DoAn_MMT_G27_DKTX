@@ -6,14 +6,12 @@ from vidstream import ScreenShareClient
 import threading
 
 from XL_Chucnang import Connection
-from XL_Chucnang.Connection import check_port_open, open_port
+
 from XL_Chucnang.CRUDConfig import read_config_client
 
 
 def monitor(client_socket):   
-    client_ip, client_port = read_config_client("config.json") 
-    print(client_ip)   
-    print(client_port)
+    client_ip, client_port = read_config_client("config.json")    
     # if not check_port_open(video_port):
     #     open_port(video_port)
     
@@ -22,9 +20,8 @@ def monitor(client_socket):
     stream_thread_stream = threading.Thread(target=client_view_stream.start_stream)
     stream_thread_stream.start()
 
-    # Theo dõi phím ESC để dừng chia sẻ màn hình
-    print("Press ESC to stop screen sharing.")
-    keyboard.wait('esc')  # Chờ đến khi phím ESC được nhấn
+    while input("") != 'STOP':
+        continue
 
     # Dừng chia sẻ màn hình
     client_view_stream.stop_stream()
