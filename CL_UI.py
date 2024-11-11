@@ -105,10 +105,10 @@ class run_Client:
 
 import tkinter as tk
 
-def create_button(parent, text, relx, rely, width, height, font="-family {Segoe UI} -size 9", cursor=None):
+def create_button(parent, text, relx, rely, width, height, font="-family {Segoe UI} -size 9", cursor=None, command=None):
     btn = tk.Button(parent, text=text, background="#d9d9d9", foreground="#000000", font=font,
                     activebackground="#d9d9d9", activeforeground="black", disabledforeground="#a3a3a3", 
-                    highlightbackground="#d9d9d9", highlightcolor="#000000", cursor=cursor)
+                    highlightbackground="#d9d9d9", highlightcolor="#000000", cursor=cursor, command=command)
     btn.place(relx=relx, rely=rely, width=width, height=height)
     return btn
 
@@ -148,23 +148,23 @@ class CL_app_process:
         self.tree_app.column("Col1", width=170, minwidth=20, stretch=1, anchor="w")
 
         # Button configuration
-        btn_list_app = create_button(self.top, "LIST APPS", 0.05, 0.043, 77, 36, command=self.list_apps_running)
-        btn_start_app = create_button(self.top, "START APP", 0.301, 0.043, 77, 36, command=self.start_app_by_path)
-        btn_stop_app = create_button(self.top, "STOP APP", 0.551, 0.043, 77, 36, command=self.stop_app_running_by_PID)
-        btn_thoat_app = create_button(self.top, "THOAT", 0.802, 0.043, 57, 36, command=self.quit_app)
+        self.btn_list_app = create_button(self.top, "LIST APPS", 0.05, 0.043, 77, 36, command=self.list_apps_running)
+        self.btn_start_app = create_button(self.top, "START APP", 0.301, 0.043, 77, 36, command=self.start_app_by_path)
+        self.btn_stop_app = create_button(self.top, "STOP APP", 0.551, 0.043, 77, 36, command=self.stop_app_running_by_PID)
+        self.btn_thoat_app = create_button(self.top, "THOAT", 0.802, 0.043, 57, 36, command=self.quit_app)
         
-        def list_apps_running(self):
-            list_apps_running(self.client_socket, self.tree_app)
+    def list_apps_running(self):
+        list_apps_running(self.client_socket, self.tree_app)
 
-        def stop_app_running_by_PID(self):
-            stop_app_running_by_PID(self.client_socket, self.tree_app)
+    def stop_app_running_by_PID(self):
+        stop_app_running_by_PID(self.client_socket, self.tree_app)
 
-        def start_app_by_path(self):
-            start_app_by_path(self.client_socket, self.tree_app)
+    def start_app_by_path(self):
+        start_app_by_path(self.client_socket, self.tree_app)
 
-        def quit_app(self):
-            close_socket(self.client_socket)
-            self.top.quit()
+    def quit_app(self):
+        close_socket(self.client_socket)
+        self.top.quit()
 
 class CL_monitor:
     def __init__(self, top=None):

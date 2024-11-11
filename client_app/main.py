@@ -1,10 +1,10 @@
-from tkinter import Tk
-from CL_controller import ClientController
+import tkinter as tk
+from CL_controller import ServerController
 
 def main():
-    root = Tk()
-    controller = ClientController(root)
-    root.mainloop()
+    window = tk.Tk()
+    controller = ServerController(window)
+    window.mainloop()
 
 if __name__ == "__main__":
     main()

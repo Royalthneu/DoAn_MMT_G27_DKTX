@@ -35,8 +35,6 @@ def open_server():
 
 
 # Hàm xử lý khi đóng server
-
-
 def close_server():
     global server_socket
     lbl_ip.config(text=f"Bí mật")
@@ -61,16 +59,16 @@ def create_label(window, text, relx, rely, width):
     ).place(relx=relx, rely=rely, height=13, width=width)
 
 
-def create_button(window, text, relx, rely, command=None, state="normal"):
-    return tk.Button(
-        window,
-        text=text,
-        background="#d9d9d9",
-        foreground="#000000",
-        font="-family {Segoe UI} -size 9",
-        command=command,
-        state=state,
-    ).place(relx=relx, rely=rely, height=26, width=97)
+# def create_button(window, text, relx, rely, command=None, state="normal"):
+#     return tk.Button(
+#         window,
+#         text=text,
+#         background="#d9d9d9",
+#         foreground="#000000",
+#         font="-family {Segoe UI} -size 9",
+#         command=command,
+#         state=state,
+#     ).place(relx=relx, rely=rely, height=26, width=97)
 
 
 def create_button_config(text, command, state, x, y, width, height):
@@ -109,12 +107,8 @@ lbl_ip = tk.Label(
 )
 lbl_ip.place(relx=0.22, rely=0.25, height=20, width=119)
 
-btn_open = create_button_config(
-    "Open Server", open_server, "normal", x=250, y=10, width=97, height=26
-)
-btn_close = create_button_config(
-    "Close Server", close_server, "disabled", x=250, y=60, width=97, height=26
-)
+btn_open = create_button_config("Open Server", open_server, "normal", x=250, y=10, width=97, height=26)
+btn_close = create_button_config("Close Server", close_server, "disabled", x=250, y=60, width=97, height=26)
 
 # Biến server_socket toàn cục
 server_socket = None
