@@ -75,31 +75,6 @@ def input_ip_port(prompt_ip, prompt_port):
         
         return ip, port
 
-# def verify_server_connection(server_ip, port):
-#     # Kiểm tra xem server có chạy hay không
-#     if not is_server_running(server_ip, port):
-#         print(f"Server tại {server_ip}:{port} không thể kết nối.")
-#         server_ip, port = input_ip_port("Nhập lại IP của server: ", "Nhập lại port của server: ")
-        
-#         # Kiểm tra lại kết nối với server sau khi nhập lại
-#         if is_server_running(server_ip, port):
-#             update_config(server_ip, port)
-#             print(f"Đã kết nối thành công đến server {server_ip}:{port}!")
-#         else:
-#             print(f"Server tại {server_ip}:{port} vẫn không thể kết nối.")
-#     else:
-#         print(f"Đã kết nối thành công với server {server_ip}:{port}!")
-
-# def is_server_running(server_ip, port):
-#     try:
-#         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#         client_socket.settimeout(3)  # Đặt timeout kết nối là 3 giây
-#         client_socket.connect((server_ip, port))
-#         client_socket.close()
-#         return True
-#     except socket.error:
-#         return False
-
 def send_command(socket, command):
     #Gửi câu lệnh từ client/server đến server/client.
     socket.sendall(command.encode())

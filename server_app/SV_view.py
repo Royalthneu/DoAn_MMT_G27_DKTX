@@ -7,8 +7,6 @@ btn_open = None
 btn_close = None
 
 class SV_View:
-
-    
     def __init__(self, window):        
         self.window = window        
         self.window.geometry("389x83+24+119")

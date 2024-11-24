@@ -114,8 +114,6 @@ btn_close = create_button_config("Close Server", close_server, "disabled", x=250
 server_socket = None
 
 # Chức năng chính của server
-
-
 def main():
     global server_socket
     server_ip = socket.gethostbyname(socket.gethostname())

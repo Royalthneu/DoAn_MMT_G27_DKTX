@@ -2,7 +2,6 @@ import socket
 from XL_Chucnang.CRUDConfig import read_config_server, update_config
 from XL_Chucnang.Connection import check_ip_address_valid, check_port_valid
 
-
 import Client.CL_app_process
 import Client.CL_services_process
 import Client.CL_shutdown_reset
