@@ -16,6 +16,9 @@ def main():
     model = CL_Model()    
     controller = CL_Controller(model, view)
     
+    # Gán sự kiện khi người dùng nhấn nút kết nối
+    view.btn_connect.configure(command=controller.connect_to_server)  # Kết nối server khi nhấn nút
+    
     window.mainloop()
 
 if __name__ == "__main__":

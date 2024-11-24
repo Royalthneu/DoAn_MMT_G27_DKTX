@@ -37,11 +37,36 @@ class CL_View:
         # Separators
         self.widget_factory.create_separator(0.027, 0.113)
         self.widget_factory.create_separator(0.027, 0.34)
+    
+    def get_server_ip_from_user(self):
+        """Lấy địa chỉ IP của server từ người dùng."""
+        return input("Dien dia chi IP cua Server: ")
+
+    def get_server_port_from_user(self):
+        """Lấy port của server từ người dùng."""
+        return int(input("Dien so port: "))
+
+    def show_invalid_ip_message(self):
+        """Hiển thị thông báo lỗi khi IP không hợp lệ."""
+        messagebox.showerror("Lỗi", "IP không hợp lệ. Vui lòng nhập lại.")
+
+    def show_invalid_port_message(self):
+        """Hiển thị thông báo lỗi khi port không hợp lệ."""
+        messagebox.showerror("Lỗi", "Port không hợp lệ. Vui lòng nhập lại.")
+
+    def show_connection_success(self, server_ip, server_port):
+        """Hiển thị thông báo kết nối thành công."""
+        messagebox.showinfo("Kết nối", f"Ket noi server co dia chi {server_ip}:{server_port} thanh cong")
+
+    def show_connection_failure(self, error_message):
+        """Hiển thị thông báo kết nối thất bại."""
+        messagebox.showerror("Kết nối thất bại", f"Ket noi khong thanh cong: {error_message}. Vui long kiem tra server co dang chay khong va IP, port co dung khong.")
         
 class CL_app_process:
-    def __init__(self, top):
+    def __init__(self, top, client_socket):
         '''This class configures and populates the toplevel window.'''
         self.top = top
+        self.client_socket = client_socket
         self.top.geometry("399x300+427+120")
         self.top.minsize(120, 1)
         self.top.maxsize(5564, 1901)
@@ -50,12 +75,10 @@ class CL_app_process:
         self.top.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="#000000")
         
         # Create an instance of WidgetFactory
-        self.widget_factory = WidgetFactory(top)
+        self.widget_factory = WidgetFactory(self.top)
         self.create_widgets()
 
     def create_widgets(self):
-        '''This method creates all the widgets for the "APPLICATIONS PROCESS" window.'''
-
         # Treeview configuration
         self.tree_app = ScrolledTreeView(self.top, columns="Col1")
         self.tree_app.place(relx=0.05, rely=0.2, relheight=0.753, relwidth=0.892)
@@ -63,18 +86,17 @@ class CL_app_process:
         self.tree_app.column("#0", width=169, minwidth=20, stretch=1, anchor="w")
         self.tree_app.heading("Col1", text="Application Name", anchor="center")
         self.tree_app.column("Col1", width=170, minwidth=20, stretch=1, anchor="w")
-        self.tree_app.heading("Col2", text="Count Thread", anchor="center")
-        self.tree_app.column("Col2", width=170, minwidth=20, stretch=1, anchor="w")
 
         # Button configuration
-        self.btn_list_app = self.widget_factory.create_button("LIST APPS", 0.05, 0.043, 77, 36)
+        self.btn_list_app = self.widget_factory.create_button("LIST APPS", 0.05, 0.043, 77, 36)        
         self.btn_start_app = self.widget_factory.create_button("START APP", 0.301, 0.043, 77, 36)
         self.btn_stop_app = self.widget_factory.create_button("STOP APP", 0.551, 0.043, 77, 36)
-        self.btn_thoat_app = self.widget_factory.create_button("THOAT", 0.802, 0.043, 57, 36)
+        self.btn_clear_list_app = self.widget_factory.create_button("CLEAR", 0.802, 0.043, 57, 36)
 
 class CL_services_process:
-    def __init__(self, top=None):
+    def __init__(self, client_socket, top=None):
         self.top = top
+        self.client_socket = client_socket
         self.top.geometry("420x300+853+120")
         self.top.minsize(120, 1)
         self.top.maxsize(5564, 1901)
@@ -90,22 +112,65 @@ class CL_services_process:
         # Treeview configuration
         self.tree_app_1 = ScrolledTreeView(self.top, columns="Col1")
         self.tree_app_1.place(relx=0.05, rely=0.2, relheight=0.753, relwidth=0.893)
-        self.tree_app_1.heading("#0", text="Name", anchor="center")
+        self.tree_app_1.heading("#0", text="Service PID", anchor="center")
         self.tree_app_1.column("#0", width=179, minwidth=20, stretch=1, anchor="w")
-        self.tree_app_1.heading("Col1", text="Col1", anchor="center")
+        self.tree_app_1.heading("Col1", text="Service Name", anchor="center")
         self.tree_app_1.column("Col1", width=179, minwidth=20, stretch=1, anchor="w")
-        self.tree_app.heading("Col2", text="Count Thread", anchor="center")
-        self.tree_app.column("Col2", width=170, minwidth=20, stretch=1, anchor="w")
-
+        
         # Button configuration
         self.btn_list_service = self.widget_factory.create_button("LIST SERVICES", 0.05, 0.043, 87, 36)
-        self.btn_start_service = self.widget_factory.create_button("START SERVICE", 0.3, 0.043, 87, 36)
+        self.btn_start_service = self.widget_factory.create_button("START SERVICES", 0.3, 0.043, 87, 36)
         self.btn_stop_service = self.widget_factory.create_button("STOP SERVICES", 0.55, 0.043, 87, 36)
-        self.btn_thoat_service = self.widget_factory.create_button("THOAT", 0.802, 0.043, 57, 36)
+        self.btn_clear_list_service = self.widget_factory.create_button("CLEAR", 0.802, 0.043, 57, 36)
+        
+class CL_form_nhap_PID:
+    def __init__(self, client_socket, top=None):
+        self.top = top
+        self.client_socket = client_socket
+        self.top.geometry("350x60+20+200")
+        self.top.minsize(120, 1)
+        self.top.maxsize(5564, 1901)
+        self.top.resizable(1, 1)
+        self.top.title("Nhập")
+        self.top.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="#000000")
+
+        # Create an instance of WidgetFactory
+        self.widget_factory = WidgetFactory(self.top)
+        self.create_widgets()
+    def create_widgets(self):
+        # Label configuration
+        self.Lb_nhap_PID = self.widget_factory.create_label("Nhập PID", 0.016, 0.25, 82, 25)
+        # Entry configuration
+        self.entry_nhap_PID = self.widget_factory.create_entry(0.2, 0.25, 0.5, 25)
+        # Button configuration with custom cursor
+        self.btn_nhap_PID = self.widget_factory.create_button("OK", 0.75, 0.25, 60, 25)
+        
+class CL_form_nhap_Name:
+    def __init__(self, client_socket, top=None):
+        self.top = top
+        self.client_socket = client_socket
+        self.top.geometry("350x60+20+200")
+        self.top.minsize(120, 1)
+        self.top.maxsize(5564, 1901)
+        self.top.resizable(1, 1)
+        self.top.title("Nhập")
+        self.top.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="#000000")
+
+        # Create an instance of WidgetFactory
+        self.widget_factory = WidgetFactory(self.top)
+        self.create_widgets()
+    def create_widgets(self):
+        # Label configuration
+        self.Lb_nhap_Name = self.widget_factory.create_label("Nhập Tên", 0.016, 0.25, 82, 25)
+        # Entry configuration
+        self.entry_nhap_Name = self.widget_factory.create_entry(0.2, 0.25, 0.5, 25)
+        # Button configuration with custom cursor
+        self.btn_nhap_Name = self.widget_factory.create_button("OK", 0.75, 0.25, 60, 25)
 
 class CL_shutdown_reset:
-    def __init__(self, top=None):
+    def __init__(self, client_socket, top=None, ):
         self.top = top
+        self.client_socket = client_socket
         self.top.geometry("374x110+13+884")
         self.top.minsize(120, 1)
         self.top.maxsize(5564, 1901)
@@ -123,8 +188,9 @@ class CL_shutdown_reset:
         self.btn_cl_reset_sv = self.widget_factory.create_button("RESET SERVER", 0.246, 0.545, 167, 36)
 
 class CL_view_screen:
-    def __init__(self, top=None):
+    def __init__(self, client_socket, top=None):
         self.top = top
+        self.client_socket = client_socket
         self.top.geometry("858x510+423+480")
         self.top.minsize(120, 1)
         self.top.maxsize(5564, 1901)
@@ -144,8 +210,9 @@ class CL_view_screen:
         self.lbl_time = self.widget_factory.create_label("DD/MM/YYYY hh:mm:ss", 0.42, 0.02, 158, 28)
 
 class CL_keylogger:
-    def __init__(self, top=None):
+    def __init__(self, client_socket, top=None):
         self.top = top
+        self.client_socket = client_socket
         self.top.geometry("637x489+1307+122")
         self.top.minsize(120, 1)
         self.top.maxsize(5564, 1901)
@@ -166,8 +233,9 @@ class CL_keylogger:
     
 
 class CL_del_copy:
-    def __init__(self, top=None):
+    def __init__(self, client_socket, top=None):
         self.top = top
+        self.client_socket = client_socket
         self.top.geometry("637x207+1315+693")
         self.top.minsize(120, 1)
         self.top.maxsize(5564, 1901)

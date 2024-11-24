@@ -20,10 +20,13 @@ def app_process():
 
                 if command == "LIST_APPS_RUNNING":
                     list_apps_running(client_socket)   
-                elif command.startswith("START_APP_BY_PATH"):
+                elif command.startswith("CLEAR_LIST_APPS"):
+                    app_path = command.split(" ", 1)[1]  # Lấy đường dẫn ứng dụng   
+                    start_app_by_path(client_socket, replace_path(app_path))    
+                elif command.startswith("START_APP_BY_NAME"):
                     app_path = command.split(" ", 1)[1]  # Lấy đường dẫn ứng dụng   
                     start_app_by_path(client_socket, replace_path(app_path))            
-                elif command.startswith("STOP_APP"):
+                elif command.startswith("STOP_APP_BY_PID"):
                     pid = int(command.split(" ", 1)[1])  # Lấy PID từ lệnh
                     stop_app(client_socket, pid)            
                 else:
