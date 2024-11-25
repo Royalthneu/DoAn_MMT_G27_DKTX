@@ -3,9 +3,10 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 
+#CL_view.py
 class CL_View:
     def __init__(self, window):        
-        self.window = window   
+        self.window = window 
         self.window.title("RUN CLIENT")
         self.window.geometry("375x529+100+100")
         self.window.resizable(0, 0)
@@ -37,7 +38,7 @@ class CL_View:
         # Separators
         self.widget_factory.create_separator(0.027, 0.113)
         self.widget_factory.create_separator(0.027, 0.34)
-    
+        
     def get_server_ip_from_user(self):
         """Lấy địa chỉ IP của server từ người dùng."""
         return input("Dien dia chi IP cua Server: ")
@@ -62,11 +63,15 @@ class CL_View:
         """Hiển thị thông báo kết nối thất bại."""
         messagebox.showerror("Kết nối thất bại", f"Ket noi khong thanh cong: {error_message}. Vui long kiem tra server co dang chay khong va IP, port co dung khong.")
         
+    def show_error(self, message):
+        messagebox.showerror("Error", message)
+        
 class CL_app_process:
-    def __init__(self, top, client_socket):
+    def __init__(self, top, client_socket, controller):
         '''This class configures and populates the toplevel window.'''
-        self.top = top
+        self.top = top        
         self.client_socket = client_socket
+        self.controller = controller
         self.top.geometry("399x300+427+120")
         self.top.minsize(120, 1)
         self.top.maxsize(5564, 1901)
@@ -92,6 +97,19 @@ class CL_app_process:
         self.btn_start_app = self.widget_factory.create_button("START APP", 0.301, 0.043, 77, 36)
         self.btn_stop_app = self.widget_factory.create_button("STOP APP", 0.551, 0.043, 77, 36)
         self.btn_clear_list_app = self.widget_factory.create_button("CLEAR", 0.802, 0.043, 57, 36)
+    
+    def update_tree_view(self, app_list):
+        # Xóa dữ liệu cũ trong TreeView trước khi hiển thị dữ liệu mới
+        for item in self.tree_app.get_children():
+            self.tree_app.delete(item)
+
+        # Thêm các ứng dụng vào TreeView
+        for pid, app_name in app_list:
+            self.tree_app.insert("", "end", text=pid, values=(app_name,))  
+            
+    def list_apps_running(self):
+        """ Handle the button click to list running applications. """
+        self.controller.list_apps_running(self.client_socket)     
 
 class CL_services_process:
     def __init__(self, client_socket, top=None):
@@ -399,3 +417,4 @@ def _on_shiftmouse(event, widget):
             widget.xview_scroll(-1, 'units')
         elif event.num == 5:
             widget.xview_scroll(1, 'units')
+

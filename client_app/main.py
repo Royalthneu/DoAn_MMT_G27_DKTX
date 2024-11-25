@@ -13,7 +13,7 @@ def main():
     port = 8081
     
     view = CL_View(window)
-    model = CL_Model()    
+    model = CL_Model(view)    
     controller = CL_Controller(model, view)
     
     # Gán sự kiện khi người dùng nhấn nút kết nối

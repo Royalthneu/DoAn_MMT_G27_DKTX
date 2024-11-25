@@ -3,7 +3,9 @@ from tkinter import messagebox
 import tkinter as tk
 
 from CL_view import CL_app_process, CL_services_process, CL_shutdown_reset, CL_view_screen, CL_keylogger, CL_del_copy, CL_form_nhap_PID, CL_form_nhap_Name
+from CL_model import CL_Model
 
+#CL_controller.py
 class CL_Controller:
     def __init__(self, model, view):
         self.model = model
@@ -57,7 +59,7 @@ class CL_Controller:
     # Tạo cửa sổ mới
         top = tk.Toplevel()
         # Khởi tạo cửa sổ từ lớp window_class
-        window_instance = window_class(top=top, client_socket=client_socket)
+        window_instance = window_class(top=top, client_socket=client_socket, controller=self)
         # Đảm bảo rằng cửa sổ chính không thể click khi cửa sổ top đang mở
         top.grab_set()
         
@@ -96,24 +98,23 @@ class CL_Controller:
         
     #1. CL_app_process    
     def list_apps_running(self, client_socket):
-        messagebox.showinfo("Feature", f"Tính năng đang được triển khai.")
-        # self.model.send_command(client_socket, "LIST_APPS_RUNNING")
-        # response = self.model.receive_response(client_socket)
-        # return response.strip()
+        """ Xử lý sự kiện nhấn nút 'LIST APPS' """
+        self.model.list_apps_running(client_socket)
+        
         
     def start_app(self, client_socket, window_instance):
         app_name = self.model.get_name_from_entry(window_instance)  # Lấy tên từ model
         if app_name:
             self.model.send_command(client_socket, f"START_APP_BY_NAME {app_name}")
             response = self.model.receive_response(client_socket)
-            return response.strip()
+            return response
 
     def stop_app(self, client_socket, window_instance):
         app_pid = self.model.get_pid_from_entry(window_instance)  # Lấy tên từ model
         if app_pid:
             self.model.send_command(client_socket, f"STOP_APP_BY_PID {app_pid}")
             response = self.model.receive_response(client_socket)
-            return response.strip()
+            return response
 
     def clear_list_apps(treeview):   
         for item in treeview.get_children():
@@ -123,17 +124,17 @@ class CL_Controller:
     def list_service_running(self, client_socket):
         self.model.send_command(client_socket, "LIST_SERVICES_RUNNING")
         response = self.model.receive_response(client_socket)
-        return response.strip()
+        return response
     
     def start_service(self, client_socket, name):
         self.model.send_command(client_socket, f"START_SERVICE_BY_NAME {name}")
         response = self.model.receive_response(client_socket)
-        return response.strip()
+        return response
 
     def stop_service(self,client_socket, pid):
         self.model.send_command(client_socket, f"STOP_SERVICE_BY_PID {pid}")
         response = self.model.receive_response(client_socket)
-        return response.strip()
+        return response
 
     def clear_list_services(treeview):        
         for item in treeview.get_children():

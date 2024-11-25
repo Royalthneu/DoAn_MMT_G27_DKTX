@@ -59,26 +59,20 @@ class SV_Model:
         """Gửi câu lệnh từ client/server đến server/client"""
         socket.sendall(command.encode())
     
-    def receive_response(self, socket, buffer_size=4096):
+    def receive_response(self, socket, buffer_size=65535):
         """Nhận phản hồi từ server/client"""
         return socket.recv(buffer_size).decode()
     
     #1. SV_App_Process:    
-    def list_apps_running(self, client_socket):
+    def list_apps_running(self):
+        """Lấy danh sách ứng dụng đang chạy từ hệ thống"""
         try:
-            # Nhận yêu cầu từ client
-            command = client_socket.recv(1024).decode()
-
-            if command == "LIST_APPS_RUNNING":
-                # Lấy danh sách ứng dụng đang chạy từ hệ thống
-                output = subprocess.check_output("tasklist", encoding='utf-8')
-                SV_Model.send_command(client_socket, output)  # Gửi dữ liệu trả về cho client
-            else:
-                SV_Model.send_command(client_socket, "Lệnh không hợp lệ.")
+            # Lấy danh sách ứng dụng đang chạy từ hệ thống
+            output = subprocess.check_output("tasklist", encoding='utf-8')  # Ensure UTF-8 encoding
+            print(f"Server output: {output}")  # Debugging line
+            return output  # Trả lại kết quả cho controller
         except Exception as e:
-            SV_Model.send_command(client_socket, str(e))
-        finally:
-            client_socket.close()
+            return str(e)  # Nếu có lỗi, trả về thông báo lỗi
 
     # Start app by path
     # 
@@ -223,7 +217,7 @@ class SV_Model:
             
             # Gửi file tới client
             with open(file_path, 'rb') as f:
-                while (chunk := f.read(4096)):
+                while (chunk := f.read(65535)):
                     client_socket.sendall(chunk)
         else:
             # Nếu file không tồn tại, gửi kích thước 0 để báo lỗi
